@@ -1,6 +1,5 @@
-package com.example.fabricasapatos.pedido
+package com.example.fabricasapatos.model
 
-import com.example.fabricasapatos.cliente.Cliente
 import java.util.Date
 
 data class Pedido(

@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.produto
+package com.example.fabricasapatos.model
 
 data class Produto(
   var id: Int,

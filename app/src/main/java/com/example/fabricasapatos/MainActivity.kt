@@ -10,7 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.fabricasapatos.model.Cliente
 import com.example.fabricasapatos.ui.theme.FabricaSapatosTheme
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +27,27 @@ class MainActivity : ComponentActivity() {
         }
       }
     }
+
+    val database = FirebaseDatabase.getInstance()
+    val myRef: DatabaseReference = database.getReference("client")
+
+    val cliente1 = Cliente("1", "Manu", "988595208", "Rua A, n 1", "@manu")
+
+    myRef.child(cliente1.cpf).setValue(cliente1)
+
+    /*myRef.addValueEventListener(object : ValueEventListener {
+      override fun onDataChange(dataSnapshot: DataSnapshot) {
+        // This method is called once with the initial value and again
+        // whenever data at this location is updated.
+        val value = dataSnapshot.getValue(String::class.java)
+        Log.d(TAG, "Value is: $value")
+      }
+
+      override fun onCancelled(error: DatabaseError) {
+        // Failed to read value
+        Log.w(TAG, "Failed to read value.", error.toException())
+      }
+    })*/
   }
 }
 

@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.cliente
+package com.example.fabricasapatos.model
 
 data class Cliente(
   var cpf: String,
