@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "14192702066",
+    "project_id": "fabricasapatos-75be7",
+    "storage_bucket": "fabricasapatos-75be7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14192702066:android:8f0b3e8f6333b34a70c8eb",
+        "android_client_info": {
+          "package_name": "com.example.fabricasapatos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14192702066-ladnungs9tenkao9p4v5thkjhslpjgur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxa__KsyMNPdR5ogzMkLYk3M781YmrvoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14192702066-ladnungs9tenkao9p4v5thkjhslpjgur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
