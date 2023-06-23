@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.fabricasapatos.model.Cliente
+import com.example.fabricasapatos.data.FirebaseClientDataSource
 import com.example.fabricasapatos.ui.theme.FabricaSapatosTheme
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -29,11 +29,13 @@ class MainActivity : ComponentActivity() {
     }
 
     val database = FirebaseDatabase.getInstance()
-    val myRef: DatabaseReference = database.getReference("client")
+    val referenceClient: DatabaseReference = database.getReference("client")
 
-    val cliente1 = Cliente("1", "Manu", "988595208", "Rua A, n 1", "@manu")
+    //val cliente1 = Client("1", "Manu", "988595208", "Rua A, n 1", "@manu")
 
-    myRef.child(cliente1.cpf).setValue(cliente1)
+    //referenceClient.child(cliente1.cpf).setValue(cliente1)
+
+    //FirebaseClientDataSource(referenceClient).getClients()
 
     /*myRef.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {

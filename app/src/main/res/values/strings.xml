@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FabricaSapatos</string>
+    <string name="title_activity_create_client">CreateClientActivity</string>
+    <string name="title_activity_get_clients">GetClientsActivity</string>
 </resources>
