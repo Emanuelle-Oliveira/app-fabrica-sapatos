@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.data
+package com.example.fabricasapatos.data.client
 
 import com.example.fabricasapatos.domain.client.model.Client
 import com.google.firebase.database.DatabaseReference
@@ -6,7 +6,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
-
 
 class FirebaseClientDataSource @Inject constructor(
   database: FirebaseDatabase

@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.data
+package com.example.fabricasapatos.data.client
 
 import com.example.fabricasapatos.domain.client.model.Client
 

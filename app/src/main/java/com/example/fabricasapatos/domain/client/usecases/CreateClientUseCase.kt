@@ -1,6 +1,6 @@
 package com.example.fabricasapatos.domain.client.usecases
 
-import com.example.fabricasapatos.data.ClientRepository
+import com.example.fabricasapatos.data.client.ClientRepository
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.ICreateClientUseCase
 import javax.inject.Inject

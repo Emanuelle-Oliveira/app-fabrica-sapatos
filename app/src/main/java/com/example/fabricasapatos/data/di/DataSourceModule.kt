@@ -1,7 +1,7 @@
 package com.example.fabricasapatos.data.di
 
-import com.example.fabricasapatos.data.FirebaseClientDataSource
-import com.example.fabricasapatos.data.IClientDataSource
+import com.example.fabricasapatos.data.client.FirebaseClientDataSource
+import com.example.fabricasapatos.data.client.IClientDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
