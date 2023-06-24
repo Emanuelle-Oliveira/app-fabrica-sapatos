@@ -1,5 +1,6 @@
 package com.example.fabricasapatos.principal
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,11 +15,11 @@ import com.example.fabricasapatos.principal.ui.theme.FabricaSapatosTheme
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
+import com.example.fabricasapatos.ui.activities.client.DeleteClientActivity
 //import com.fabricasapatos.navigationdrawercompose.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
 
@@ -46,26 +47,29 @@ class MainActivity : ComponentActivity() {
                         DrawerBody(
                             items = listOf(
                                 MenuItem(
-                                    id = "home",
-                                    title = "Home",
-                                    contentDescription = "Go to home screen",
-                                    icon = Icons.Default.Home
+                                    id = "cliente",
+                                    title = "Clientes",
+                                    contentDescription = "Tela de Clientes",
+                                    icon = Icons.Default.Person
                                 ),
                                 MenuItem(
-                                    id = "settings",
-                                    title = "Settings",
-                                    contentDescription = "Go to settings screen",
-                                    icon = Icons.Default.Settings
+                                    id = "produto",
+                                    title = "Produtos",
+                                    contentDescription = "Tela de Produtos",
+                                    icon = Icons.Default.Star
                                 ),
                                 MenuItem(
-                                    id = "help",
-                                    title = "Help",
-                                    contentDescription = "Get help",
-                                    icon = Icons.Default.Info
+                                    id = "pedido",
+                                    title = "Pedidos",
+                                    contentDescription = "Fazer Pedidos",
+                                    icon = Icons.Default.ShoppingCart
                                 ),
                             ),
                             onItemClick = {
-                                println("Clicked on ${it.title}")
+                                when(it.id){
+                                    "cliente" -> {val intent = Intent(applicationContext, CreateClientActivity::class.java)
+                                    startActivity(intent)}
+                                }
                             }
                         )
                     }
