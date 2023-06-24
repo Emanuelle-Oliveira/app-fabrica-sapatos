@@ -35,10 +35,10 @@ class GetClientsActivity : ComponentActivity() {
       }
     }
 
-    lifecycleScope.launch {
+    /*lifecycleScope.launch {
       val clientsList = getClientsUseCase()
       Log.i("TESTE", clientsList.toString())
-    }
+    }*/
   }
 }
 
