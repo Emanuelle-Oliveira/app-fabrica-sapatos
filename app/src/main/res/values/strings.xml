@@ -2,4 +2,5 @@
     <string name="app_name">FabricaSapatos</string>
     <string name="title_activity_create_client">CreateClientActivity</string>
     <string name="title_activity_get_clients">GetClientsActivity</string>
+    <string name="title_activity_update_client">UpdateClientActivity</string>
 </resources>

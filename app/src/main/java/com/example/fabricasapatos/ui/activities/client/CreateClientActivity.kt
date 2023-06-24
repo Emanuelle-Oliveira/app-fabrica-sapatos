@@ -23,6 +23,7 @@ class CreateClientActivity(): ComponentActivity() {
 
   @Inject
   lateinit var createClientUseCase: ICreateClientUseCase
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {

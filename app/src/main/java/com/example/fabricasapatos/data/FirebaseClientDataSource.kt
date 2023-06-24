@@ -17,7 +17,20 @@ class FirebaseClientDataSource @Inject constructor(
 
   override suspend fun createClient(client: Client): Client {
     return suspendCoroutine { continuation ->
+      reference
+        .child(client.cpf)
+        .setValue(client)
+        .addOnSuccessListener {
+          continuation.resumeWith(Result.success(client))
+        }
+        .addOnFailureListener{exception ->
+          continuation.resumeWith(Result.failure(exception))
+        }
+    }
+  }
 
+  override suspend fun updateClient(client: Client): Client {
+    return suspendCoroutine { continuation ->
       reference
         .child(client.cpf)
         .setValue(client)
@@ -53,6 +66,20 @@ class FirebaseClientDataSource @Inject constructor(
       reference.get().addOnFailureListener{ exception ->
         continuation.resumeWith(Result.failure(exception))
       }
+    }
+  }
+
+  override suspend fun deleteClient(cpf: String): String {
+    return suspendCoroutine { continuation ->
+      reference
+        .child(cpf)
+        .removeValue()
+        .addOnSuccessListener {
+          continuation.resumeWith(Result.success(cpf))
+        }
+        .addOnFailureListener{exception ->
+          continuation.resumeWith(Result.failure(exception))
+        }
     }
   }
 }

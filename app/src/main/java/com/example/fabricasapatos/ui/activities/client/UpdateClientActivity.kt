@@ -1,6 +1,5 @@
-package com.example.fabricasapatos
+package com.example.fabricasapatos.ui.activities.client
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,40 +10,54 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
-import com.example.fabricasapatos.ui.activities.client.GetClientsActivity
-import com.example.fabricasapatos.ui.activities.client.UpdateClientActivity
-import com.example.fabricasapatos.ui.theme.FabricaSapatosTheme
+import androidx.lifecycle.lifecycleScope
+import com.example.fabricasapatos.domain.usecases.contracts.IUpdateClientUseCase
+import com.example.fabricasapatos.ui.activities.client.ui.theme.FabricaSapatosTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class UpdateClientActivity : ComponentActivity() {
+
+  @Inject
+  lateinit var updateClientUseCase: IUpdateClientUseCase
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
       FabricaSapatosTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          Greeting("Android")
+          Greeting4("Atualizar cliente")
         }
       }
     }
-    val intent = Intent(applicationContext, UpdateClientActivity::class.java)
-    startActivity(intent)
+
+    val cpf = "1"
+    val name = "Emanuelle"
+    val phone = "988595208"
+    val address = "Rua Anibal, n 299"
+    val instagram = "@manuoliveira"
+
+
+    lifecycleScope.launch {
+      val client = updateClientUseCase(cpf, name, phone, address, instagram)
+    }
   }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting4(name: String, modifier: Modifier = Modifier) {
   Text(
-    text = "Hello $name!",
+    text = name,
     modifier = modifier
   )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun GreetingPreview4() {
   FabricaSapatosTheme {
-    Greeting("Android")
+    Greeting4("Atualizar cliente")
   }
 }

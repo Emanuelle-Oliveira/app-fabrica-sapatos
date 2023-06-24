@@ -10,5 +10,11 @@ class ClientRepository @Inject constructor(
   suspend fun createClient( client: Client): Client
   = dataSource.createClient(client)
 
+  suspend fun updateClient( client: Client): Client
+      = dataSource.updateClient(client)
+
   suspend fun getClients(): List<Client> = dataSource.getClients()
+
+  suspend fun deleteClient( cpf: String): String
+      = dataSource.deleteClient(cpf)
 }

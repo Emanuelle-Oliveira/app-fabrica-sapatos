@@ -17,6 +17,11 @@
         android:theme="@style/Theme.FabricaSapatos"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.client.UpdateClientActivity"
+            android:exported="false"
+            android:label="@string/title_activity_update_client"
+            android:theme="@style/Theme.FabricaSapatos" />
+        <activity
             android:name=".ui.activities.client.GetClientsActivity"
             android:exported="false"
             android:label="@string/title_activity_get_clients"
