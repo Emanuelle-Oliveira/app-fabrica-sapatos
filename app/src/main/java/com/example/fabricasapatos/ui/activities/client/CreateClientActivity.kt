@@ -21,7 +21,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CreateClientActivity(): ComponentActivity() {
 
-  @Inject lateinit var createClientUseCase: ICreateClientUseCase
+  @Inject
+  lateinit var createClientUseCase: ICreateClientUseCase
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
@@ -32,18 +33,17 @@ class CreateClientActivity(): ComponentActivity() {
         }
       }
     }
-    createClient()
-  }
+    val cpf = "3"
+    val name = "maria"
+    val phone = "67890"
+    val address = "Rua C, n 3"
+    val instagram = "@maria"
 
-  private fun createClient() {
+    /*
     lifecycleScope.launch {
-      val cpf = "2"
-      val name = "joao"
-      val phone = "12345"
-      val address = "Rua B, n 2"
-      val instagram = "@joao"
       val client = createClientUseCase(cpf, name, phone, address, instagram)
     }
+    */
   }
 }
 

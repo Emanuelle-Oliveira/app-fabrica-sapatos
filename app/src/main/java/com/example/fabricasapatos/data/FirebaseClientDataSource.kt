@@ -41,10 +41,10 @@ class FirebaseClientDataSource @Inject constructor(
             val json = gson.toJson(i.value)
             val client = gson.fromJson(json, Client::class.java)
 
-            Log.i("TESTE", client.toString())
+            //Log.i("TESTE", client.toString())
 
             clientsList.add(Client(client.cpf, client.name, client.phone, client.address, client.instagram))
-            Log.i("Teste", "Array: $clientsList")
+            //Log.i("Teste", "Array: $clientsList")
           }
         }
         continuation.resumeWith(Result.success(clientsList))
