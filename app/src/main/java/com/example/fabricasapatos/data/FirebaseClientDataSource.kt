@@ -1,7 +1,6 @@
 package com.example.fabricasapatos.data
 
-import android.util.Log
-import com.example.fabricasapatos.domain.model.Client
+import com.example.fabricasapatos.domain.client.model.Client
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson

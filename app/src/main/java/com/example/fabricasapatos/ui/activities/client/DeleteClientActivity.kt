@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import com.example.fabricasapatos.domain.usecases.contracts.IDeleteClientUseCase
+import com.example.fabricasapatos.domain.client.usecases.contracts.IDeleteClientUseCase
 import com.example.fabricasapatos.ui.activities.client.ui.theme.FabricaSapatosTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

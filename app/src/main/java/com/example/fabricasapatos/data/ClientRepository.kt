@@ -1,6 +1,6 @@
 package com.example.fabricasapatos.data
 
-import com.example.fabricasapatos.domain.model.Client
+import com.example.fabricasapatos.domain.client.model.Client
 import javax.inject.Inject
 
 class ClientRepository @Inject constructor(

@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.domain.model
+package com.example.fabricasapatos.domain.product.model
 
 data class Product(
   var id: Int,

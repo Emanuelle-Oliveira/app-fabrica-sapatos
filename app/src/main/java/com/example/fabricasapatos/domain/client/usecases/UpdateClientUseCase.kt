@@ -1,9 +1,8 @@
-package com.example.fabricasapatos.domain.usecases
+package com.example.fabricasapatos.domain.client.usecases
 
 import com.example.fabricasapatos.data.ClientRepository
-import com.example.fabricasapatos.domain.model.Client
-import com.example.fabricasapatos.domain.usecases.contracts.ICreateClientUseCase
-import com.example.fabricasapatos.domain.usecases.contracts.IUpdateClientUseCase
+import com.example.fabricasapatos.domain.client.model.Client
+import com.example.fabricasapatos.domain.client.usecases.contracts.IUpdateClientUseCase
 import javax.inject.Inject
 
 class UpdateClientUseCase @Inject constructor(
