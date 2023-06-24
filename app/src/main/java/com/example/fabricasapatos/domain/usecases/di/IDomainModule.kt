@@ -2,9 +2,11 @@ package com.example.fabricasapatos.domain.usecases.di
 
 import androidx.activity.ComponentActivity
 import com.example.fabricasapatos.domain.usecases.CreateClientUseCase
+import com.example.fabricasapatos.domain.usecases.DeleteClientUseCase
 import com.example.fabricasapatos.domain.usecases.GetClientsUseCase
 import com.example.fabricasapatos.domain.usecases.UpdateClientUseCase
 import com.example.fabricasapatos.domain.usecases.contracts.ICreateClientUseCase
+import com.example.fabricasapatos.domain.usecases.contracts.IDeleteClientUseCase
 import com.example.fabricasapatos.domain.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.usecases.contracts.IUpdateClientUseCase
 import dagger.Binds
@@ -24,4 +26,7 @@ interface IDomainModule {
 
   @Binds
   fun bindGetClientsUseCase(useCase: GetClientsUseCase): IGetClientsUseCase
+
+  @Binds
+  fun bindDeleteClientUseCase(useCase: DeleteClientUseCase): IDeleteClientUseCase
 }

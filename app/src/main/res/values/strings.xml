@@ -3,4 +3,5 @@
     <string name="title_activity_create_client">CreateClientActivity</string>
     <string name="title_activity_get_clients">GetClientsActivity</string>
     <string name="title_activity_update_client">UpdateClientActivity</string>
+    <string name="title_activity_delete_client">DeleteClientActivity</string>
 </resources>

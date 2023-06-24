@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
+import com.example.fabricasapatos.ui.activities.client.DeleteClientActivity
 import com.example.fabricasapatos.ui.activities.client.GetClientsActivity
 import com.example.fabricasapatos.ui.activities.client.UpdateClientActivity
 import com.example.fabricasapatos.ui.theme.FabricaSapatosTheme
@@ -28,7 +29,7 @@ class MainActivity : ComponentActivity() {
         }
       }
     }
-    val intent = Intent(applicationContext, UpdateClientActivity::class.java)
+    val intent = Intent(applicationContext, DeleteClientActivity::class.java)
     startActivity(intent)
   }
 }

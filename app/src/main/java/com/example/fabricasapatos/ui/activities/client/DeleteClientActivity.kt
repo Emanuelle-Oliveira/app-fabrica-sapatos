@@ -11,42 +11,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import com.example.fabricasapatos.domain.usecases.contracts.IUpdateClientUseCase
+import com.example.fabricasapatos.domain.usecases.contracts.IDeleteClientUseCase
 import com.example.fabricasapatos.ui.activities.client.ui.theme.FabricaSapatosTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpdateClientActivity : ComponentActivity() {
+class DeleteClientActivity : ComponentActivity() {
 
   @Inject
-  lateinit var updateClientUseCase: IUpdateClientUseCase
+  lateinit var deleteClientUseCase: IDeleteClientUseCase
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
       FabricaSapatosTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          Greeting4("Atualizar cliente")
+          Greeting5("Deletar cliente")
         }
       }
     }
 
-    val cpf = "1"
-    val name = "Emanuelle"
-    val phone = "988595208"
-    val address = "Rua Anibal, n 299"
-    val instagram = "@manuoliveira"
+    val cpf = "2"
 
     /*lifecycleScope.launch {
-      val client = updateClientUseCase(cpf, name, phone, address, instagram)
+      val cpf = deleteClientUseCase(cpf)
     }*/
   }
 }
 
 @Composable
-fun Greeting4(name: String, modifier: Modifier = Modifier) {
+fun Greeting5(name: String, modifier: Modifier = Modifier) {
   Text(
     text = name,
     modifier = modifier
@@ -55,8 +51,8 @@ fun Greeting4(name: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview4() {
+fun GreetingPreview5() {
   FabricaSapatosTheme {
-    Greeting4("Atualizar cliente")
+    Greeting5("Deletar cliente")
   }
 }
