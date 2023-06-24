@@ -3,8 +3,9 @@ package com.example.fabricasapatos.domain.usecases
 import com.example.fabricasapatos.data.ClientRepository
 import com.example.fabricasapatos.domain.model.Client
 import com.example.fabricasapatos.domain.usecases.contracts.ICreateClientUseCase
+import javax.inject.Inject
 
-class CreateClientUseCase(
+class CreateClientUseCase @Inject constructor(
   private val clientRepository: ClientRepository
 ): ICreateClientUseCase {
   override suspend fun invoke(

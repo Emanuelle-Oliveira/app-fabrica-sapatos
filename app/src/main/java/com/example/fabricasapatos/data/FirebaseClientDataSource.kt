@@ -3,14 +3,17 @@ package com.example.fabricasapatos.data
 import android.util.Log
 import com.example.fabricasapatos.domain.model.Client
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
+import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
-class FirebaseClientDataSource(
-  reference: DatabaseReference
-): IClientDataSource {
 
-  private val reference = reference
+class FirebaseClientDataSource @Inject constructor(
+  database: FirebaseDatabase
+): IClientDataSource {
+  //private val database = FirebaseDatabase.getInstance()
+  private val reference: DatabaseReference = database.getReference("client")
 
   override suspend fun createClient(client: Client): Client {
     return suspendCoroutine { continuation ->

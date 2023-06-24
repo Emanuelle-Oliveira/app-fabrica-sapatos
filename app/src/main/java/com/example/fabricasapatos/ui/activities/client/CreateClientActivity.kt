@@ -10,18 +10,39 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
+import com.example.fabricasapatos.domain.usecases.CreateClientUseCase
+import com.example.fabricasapatos.domain.usecases.contracts.ICreateClientUseCase
 import com.example.fabricasapatos.ui.activities.client.ui.theme.FabricaSapatosTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateClientActivity : ComponentActivity() {
+@AndroidEntryPoint
+class CreateClientActivity(): ComponentActivity() {
+
+  @Inject lateinit var createClientUseCase: ICreateClientUseCase
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
       FabricaSapatosTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          Greeting2("Android")
+          Greeting2("Criar cliente")
         }
       }
+    }
+    createClient()
+  }
+
+  private fun createClient() {
+    lifecycleScope.launch {
+      val cpf = "2"
+      val name = "joao"
+      val phone = "12345"
+      val address = "Rua B, n 2"
+      val instagram = "@joao"
+      val client = createClientUseCase(cpf, name, phone, address, instagram)
     }
   }
 }
@@ -29,7 +50,7 @@ class CreateClientActivity : ComponentActivity() {
 @Composable
 fun Greeting2(name: String, modifier: Modifier = Modifier) {
   Text(
-    text = "Hello $name!",
+    text = name,
     modifier = modifier
   )
 }
@@ -38,6 +59,6 @@ fun Greeting2(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview2() {
   FabricaSapatosTheme {
-    Greeting2("Android")
+    Greeting2("Criar cliente")
   }
 }
