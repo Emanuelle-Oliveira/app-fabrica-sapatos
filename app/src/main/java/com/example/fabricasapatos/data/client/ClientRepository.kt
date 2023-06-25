@@ -1,6 +1,7 @@
 package com.example.fabricasapatos.data.client
 
 import com.example.fabricasapatos.domain.client.model.Client
+import com.example.fabricasapatos.domain.client.types.NameAndCpfClient
 import javax.inject.Inject
 
 class ClientRepository @Inject constructor(
@@ -14,6 +15,8 @@ class ClientRepository @Inject constructor(
       = dataSource.updateClient(client)
 
   suspend fun getClients(): List<Client> = dataSource.getClients()
+
+  suspend fun getNameAndCpfClients(): List<NameAndCpfClient> = dataSource.getNameAndCpfClients()
 
   suspend fun deleteClient(cpf: String): String
       = dataSource.deleteClient(cpf)

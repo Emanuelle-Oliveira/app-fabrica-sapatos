@@ -3,10 +3,12 @@ package com.example.fabricasapatos.domain.di
 import com.example.fabricasapatos.domain.client.usecases.CreateClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.DeleteClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.GetClientsUseCase
+import com.example.fabricasapatos.domain.client.usecases.GetNameAndCpfClientsUseCase
 import com.example.fabricasapatos.domain.client.usecases.UpdateClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.ICreateClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IDeleteClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
+import com.example.fabricasapatos.domain.client.usecases.contracts.IGetNameAndCpfClientsUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IUpdateClientUseCase
 import com.example.fabricasapatos.domain.product.usecases.CreateProductUseCase
 import com.example.fabricasapatos.domain.product.usecases.DeleteProductUseCase
@@ -35,6 +37,9 @@ interface IDomainModule {
 
   @Binds
   fun bindGetClientsUseCase(useCase: GetClientsUseCase): IGetClientsUseCase
+
+  @Binds
+  fun bindGetNameAndCpfClientsUseCase(useCase: GetNameAndCpfClientsUseCase): IGetNameAndCpfClientsUseCase
 
   @Binds
   fun bindDeleteClientUseCase(useCase: DeleteClientUseCase): IDeleteClientUseCase

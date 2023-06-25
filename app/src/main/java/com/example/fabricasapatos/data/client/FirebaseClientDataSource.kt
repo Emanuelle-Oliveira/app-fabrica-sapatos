@@ -1,6 +1,8 @@
 package com.example.fabricasapatos.data.client
 
+import android.util.Log
 import com.example.fabricasapatos.domain.client.model.Client
+import com.example.fabricasapatos.domain.client.types.NameAndCpfClient
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
@@ -12,6 +14,7 @@ class FirebaseClientDataSource @Inject constructor(
 ): IClientDataSource {
   //private val database = FirebaseDatabase.getInstance()
   private val reference: DatabaseReference = database.getReference("client")
+  //private val nameReference: DatabaseReference = database.getReference("client/name")
 
   override suspend fun createClient(client: Client): Client {
     return suspendCoroutine { continuation ->
@@ -59,9 +62,30 @@ class FirebaseClientDataSource @Inject constructor(
           }
         }
         continuation.resumeWith(Result.success(clientsList))
+      }.addOnFailureListener{ exception ->
+        continuation.resumeWith(Result.failure(exception))
       }
+    }
+  }
 
-      reference.get().addOnFailureListener{ exception ->
+  override suspend fun getNameAndCpfClients(): List<NameAndCpfClient> {
+    return suspendCoroutine { continuation ->
+
+      reference.get().addOnSuccessListener { snapshot ->
+        val clientsList = ArrayList<NameAndCpfClient>()
+        if (snapshot.exists()) {
+          for (i in snapshot.children) {
+            val clientData = i.value as Map<*, *>
+            val name = clientData["name"] as? String ?: ""
+            val cpf = clientData["cpf"] as? String ?: ""
+
+            val client = NameAndCpfClient(name, cpf)
+            clientsList.add(client)
+          }
+        }
+        //Log.i("TESTE", clientsList.toString())
+        continuation.resumeWith(Result.success(clientsList))
+      }.addOnFailureListener{ exception ->
         continuation.resumeWith(Result.failure(exception))
       }
     }

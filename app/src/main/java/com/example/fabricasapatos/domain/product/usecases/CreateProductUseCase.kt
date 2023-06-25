@@ -20,7 +20,7 @@ class CreateProductUseCase @Inject constructor(
 
     return try {
       val imageUrl = uploadProductImageUseCase(imageUri)
-      Log.i("TESTE", imageUrl.toString())
+      //Log.i("TESTE", imageUrl.toString())
       val product = Product(id, description, value, imageUrl)
       productRepository.createProduct(product)
     } catch (e: Exception) {

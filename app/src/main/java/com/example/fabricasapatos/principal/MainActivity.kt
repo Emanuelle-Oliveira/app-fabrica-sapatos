@@ -21,6 +21,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.lifecycle.lifecycleScope
+import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
+import com.example.fabricasapatos.domain.client.usecases.contracts.IGetNameAndCpfClientsUseCase
 import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProductUseCase
 import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +35,11 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var createProductUseCase: ICreateProductUseCase
+
+    @Inject
+    lateinit var getNameAndCpfClientsUseCase: IGetNameAndCpfClientsUseCase
+    @Inject
+    lateinit var getClientsUseCase: IGetClientsUseCase
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +95,9 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
+        }
+        lifecycleScope.launch {
+            val list = getClientsUseCase()
         }
     }
 }
