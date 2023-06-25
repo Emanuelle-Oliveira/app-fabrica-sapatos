@@ -4,6 +4,7 @@ import android.net.Uri
 import com.example.fabricasapatos.data.product.ProductRepository
 import com.example.fabricasapatos.domain.product.model.Product
 import com.example.fabricasapatos.domain.product.usecases.contracts.IUpdateProductUseCase
+import java.util.UUID
 import javax.inject.Inject
 
 class UpdateProductUseCase @Inject constructor(

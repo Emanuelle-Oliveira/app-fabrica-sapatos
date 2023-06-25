@@ -1,6 +1,7 @@
 package com.example.fabricasapatos.data.product
 
 import android.net.Uri
+import android.util.Log
 import com.example.fabricasapatos.domain.product.model.Product
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -17,6 +18,7 @@ class FirebaseProductDataSource @Inject constructor(
 ): IProductDataSource {
 
   private val databaseReference: DatabaseReference = database.getReference("product")
+  private val idReference: DatabaseReference = database.getReference("lastProductId")
   private val storageReference: StorageReference = storage.reference
 
   override suspend fun createProduct(product: Product): Product {
@@ -65,9 +67,7 @@ class FirebaseProductDataSource @Inject constructor(
           }
         }
         continuation.resumeWith(Result.success(productsList))
-      }
-
-      databaseReference.get().addOnFailureListener{ exception ->
+      }.addOnFailureListener{ exception ->
         continuation.resumeWith(Result.failure(exception))
       }
     }
@@ -96,6 +96,33 @@ class FirebaseProductDataSource @Inject constructor(
             continuation.resumeWith(Result.success(path))
           }
         }.addOnFailureListener { exception ->
+          continuation.resumeWith(Result.failure(exception))
+        }
+    }
+  }
+
+  override suspend fun getLastProductId(): Int {
+    return suspendCoroutine { continuation ->
+
+      idReference.get().addOnSuccessListener { snapshot ->
+        val idString = snapshot.value.toString()
+        val id = idString.toInt()
+
+        continuation.resumeWith(Result.success(id))
+      }.addOnFailureListener{ exception ->
+        continuation.resumeWith(Result.failure(exception))
+      }
+    }
+  }
+
+  override suspend fun updateLastProductId(id: Int): Int {
+    return suspendCoroutine { continuation ->
+      idReference
+        .setValue(id+1)
+        .addOnSuccessListener {
+          continuation.resumeWith(Result.success(id+1))
+        }
+        .addOnFailureListener{exception ->
           continuation.resumeWith(Result.failure(exception))
         }
     }

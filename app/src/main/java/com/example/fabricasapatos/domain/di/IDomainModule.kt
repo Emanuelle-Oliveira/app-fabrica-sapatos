@@ -10,6 +10,14 @@ import com.example.fabricasapatos.domain.client.usecases.contracts.IDeleteClient
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetNameAndCpfClientsUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IUpdateClientUseCase
+import com.example.fabricasapatos.domain.order.usecases.CreateOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.DeleteOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.GetOrdersByClientUseCase
+import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.contracts.IUpdateOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.UpdateOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.contracts.IDeleteOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByClientUseCase
 import com.example.fabricasapatos.domain.product.usecases.CreateProductUseCase
 import com.example.fabricasapatos.domain.product.usecases.DeleteProductUseCase
 import com.example.fabricasapatos.domain.product.usecases.GetProductsUseCase
@@ -58,4 +66,16 @@ interface IDomainModule {
 
   @Binds
   fun bindUploadProductImageUseCase(useCase: UploadProductImageUseCase): IUploadProductImageUseCase
+
+  @Binds
+  fun bindCreateOrderUseCase(useCase: CreateOrderUseCase): ICreateOrderUseCase
+
+  @Binds
+  fun bindUpdateOrderUseCase(useCase: UpdateOrderUseCase): IUpdateOrderUseCase
+
+  @Binds
+  fun bindGetOrdersByClientUseCase(useCase: GetOrdersByClientUseCase): IGetOrdersByClientUseCase
+
+  @Binds
+  fun bindDeleteOrderUseCase(useCase: DeleteOrderUseCase): IDeleteOrderUseCase
 }

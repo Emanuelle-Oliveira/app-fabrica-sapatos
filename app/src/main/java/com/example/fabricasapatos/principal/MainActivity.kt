@@ -1,7 +1,9 @@
 package com.example.fabricasapatos.principal
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,23 +25,34 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetNameAndCpfClientsUseCase
+import com.example.fabricasapatos.domain.order.usecases.CreateOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.DeleteOrderUseCase
+import com.example.fabricasapatos.domain.order.usecases.GetOrdersByClientUseCase
+import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUseCase
+import com.example.fabricasapatos.domain.product.usecases.CreateProductUseCase
+import com.example.fabricasapatos.domain.product.usecases.GetProductsUseCase
 import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProductUseCase
 import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
 import dagger.hilt.android.AndroidEntryPoint
 //import com.fabricasapatos.navigationdrawercompose.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var createProductUseCase: ICreateProductUseCase
+    lateinit var getOrdersByClientUseCase: GetOrdersByClientUseCase
 
     @Inject
-    lateinit var getNameAndCpfClientsUseCase: IGetNameAndCpfClientsUseCase
+    lateinit var getProductsUseCase: GetProductsUseCase
+
     @Inject
-    lateinit var getClientsUseCase: IGetClientsUseCase
+    lateinit var createOrderUseCase: CreateOrderUseCase
+
+    @Inject
+    lateinit var createProductUseCase: CreateProductUseCase
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,13 +104,15 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
-                ) {
-
-                }
+                ) {}
             }
         }
-        lifecycleScope.launch {
-            val list = getClientsUseCase()
-        }
+        /*lifecycleScope.launch {
+            //val product = createProductUseCase("descrevendo o sandalia", 150.0, Uri.EMPTY)
+            //val list = getProductsUseCase()
+            val list = getOrdersByClientUseCase("3")
+            Log.i("TESTE", list.toString())
+            //val order = createOrderUseCase("3")
+        }*/
     }
 }

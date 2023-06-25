@@ -2,6 +2,7 @@ package com.example.fabricasapatos.data.product
 
 import android.net.Uri
 import com.example.fabricasapatos.domain.product.model.Product
+import java.util.UUID
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
@@ -21,4 +22,8 @@ class ProductRepository @Inject constructor(
 
   suspend fun uploadProductImage(imageUri: Uri): String =
     dataSource.uploadProductImage(imageUri)
+
+  suspend fun getLastProductId(): Int = dataSource.getLastProductId()
+
+  suspend fun updateLastProductId(id: Int): Int = dataSource.updateLastProductId(id)
 }
