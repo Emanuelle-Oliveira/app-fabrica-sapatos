@@ -13,7 +13,7 @@ class CreateOrderUseCase @Inject constructor(
   private val orderRepository: OrderRepository
 ): ICreateOrderUseCase {
   override suspend fun invoke(
-    cpfClient: String
+    clientCpf: String
   ): Order {
 
     return try {
@@ -24,7 +24,7 @@ class CreateOrderUseCase @Inject constructor(
       val id = orderRepository.getLastOrderId()
       val newId = orderRepository.updateLastOrderId(id)
 
-      val order = Order(id, dateString, cpfClient)
+      val order = Order(newId, dateString, clientCpf)
       orderRepository.createOrder(order)
 
     } catch (e: Exception) {

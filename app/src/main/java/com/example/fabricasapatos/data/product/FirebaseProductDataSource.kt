@@ -3,6 +3,7 @@ package com.example.fabricasapatos.data.product
 import android.net.Uri
 import android.util.Log
 import com.example.fabricasapatos.domain.product.model.Product
+import com.example.fabricasapatos.domain.product.types.DescriptionAndIdProduct
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -66,6 +67,32 @@ class FirebaseProductDataSource @Inject constructor(
             //Log.i("Teste", "Array: $clientsList")
           }
         }
+        continuation.resumeWith(Result.success(productsList))
+      }.addOnFailureListener{ exception ->
+        continuation.resumeWith(Result.failure(exception))
+      }
+    }
+  }
+
+  override suspend fun getDescriptionAndIdProducts(): List<DescriptionAndIdProduct> {
+    return suspendCoroutine { continuation ->
+      databaseReference.get().addOnSuccessListener { snapshot ->
+        val productsList = ArrayList<DescriptionAndIdProduct>()
+        if (snapshot.exists()) {
+          for (i in snapshot.children) {
+            val productData = i.value as Map<*, *>
+            val description = productData["description"] as? String ?: ""
+            val idString = productData["id"].toString()
+
+            val id = idString.toInt()
+
+            Log.i("TESTE", id.toString())
+
+            val product = DescriptionAndIdProduct(description, id)
+            productsList.add(product)
+          }
+        }
+        //Log.i("TESTE", clientsList.toString())
         continuation.resumeWith(Result.success(productsList))
       }.addOnFailureListener{ exception ->
         continuation.resumeWith(Result.failure(exception))

@@ -2,7 +2,7 @@ package com.example.fabricasapatos.data.product
 
 import android.net.Uri
 import com.example.fabricasapatos.domain.product.model.Product
-import java.util.UUID
+import com.example.fabricasapatos.domain.product.types.DescriptionAndIdProduct
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
@@ -16,6 +16,8 @@ class ProductRepository @Inject constructor(
       = dataSource.updateProduct(product)
 
   suspend fun getProducts(): List<Product> = dataSource.getProducts()
+
+  suspend fun getDescriptionAndIdProducts(): List<DescriptionAndIdProduct> = dataSource.getDescriptionAndIdProducts()
 
   suspend fun deleteProduct(id: Int): Int
       = dataSource.deleteProduct(id)

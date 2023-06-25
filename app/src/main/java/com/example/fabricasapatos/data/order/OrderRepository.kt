@@ -14,7 +14,7 @@ class OrderRepository @Inject constructor(
   suspend fun updateOrder(order: Order): Order
       = dataSource.updateOrder(order)
 
-  suspend fun getOrdersByClient(cpfClient: String): List<Order> = dataSource.getOrdersByClient(cpfClient)
+  suspend fun getOrdersByClient(clientCpf: String): List<Order> = dataSource.getOrdersByClient(clientCpf)
 
   suspend fun deleteOrder(id: Int): Int
       = dataSource.deleteOrder(id)

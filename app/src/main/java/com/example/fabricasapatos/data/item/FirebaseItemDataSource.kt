@@ -1,27 +1,26 @@
-package com.example.fabricasapatos.data.order
+package com.example.fabricasapatos.data.item
 
-import com.example.fabricasapatos.domain.order.model.Order
+import com.example.fabricasapatos.domain.item.model.Item
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
-import java.util.UUID
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
-class FirebaseOrderDataSource @Inject constructor(
+class FirebaseItemDataSource @Inject constructor(
   database: FirebaseDatabase
-): IOrderDataSource {
+): IItemDataSource {
 
-  private val databaseReference: DatabaseReference = database.getReference("order")
-  private val idReference: DatabaseReference = database.getReference("lastOrderId")
+  private val databaseReference: DatabaseReference = database.getReference("item")
+  private val idReference: DatabaseReference = database.getReference("lastItemId")
 
-  override suspend fun createOrder(order: Order): Order {
+  override suspend fun createItem(item: Item): Item {
     return suspendCoroutine { continuation ->
       databaseReference
-        .child(order.id.toString())
-        .setValue(order)
+        .child(item.id.toString())
+        .setValue(item)
         .addOnSuccessListener {
-          continuation.resumeWith(Result.success(order))
+          continuation.resumeWith(Result.success(item))
         }
         .addOnFailureListener{exception ->
           continuation.resumeWith(Result.failure(exception))
@@ -29,13 +28,13 @@ class FirebaseOrderDataSource @Inject constructor(
     }
   }
 
-  override suspend fun updateOrder(order: Order): Order {
+  override suspend fun updateItem(item: Item): Item {
     return suspendCoroutine { continuation ->
       databaseReference
-        .child(order.id.toString())
-        .setValue(order)
+        .child(item.id.toString())
+        .setValue(item)
         .addOnSuccessListener {
-          continuation.resumeWith(Result.success(order))
+          continuation.resumeWith(Result.success(item))
         }
         .addOnFailureListener{exception ->
           continuation.resumeWith(Result.failure(exception))
@@ -43,39 +42,40 @@ class FirebaseOrderDataSource @Inject constructor(
     }
   }
 
-  override suspend fun getOrdersByClient(clientCpf: String): List<Order> {
+  override suspend fun getItemsByOrder(orderId: Int): List<Item> {
     return suspendCoroutine { continuation ->
       databaseReference
-        .orderByChild("clientCpf")
-        .equalTo(clientCpf).get()
+        .orderByChild("orderId")
+        .equalTo(orderId.toString()).get()
         .addOnSuccessListener { snapshot ->
-          val ordersList = ArrayList<Order>()
+          val itemsList = ArrayList<Item>()
           if (snapshot.exists()) {
             var gson = Gson()
             for (i in snapshot.children) {
               val json = gson.toJson(i.value)
-              val order = gson.fromJson(json, Order::class.java)
+              val item = gson.fromJson(json, Item::class.java)
 
               //Log.i("TESTE", client.toString())
 
-              ordersList.add(
-                Order(
-                  order.id,
-                  order.date,
-                  order.clientCpf
-                )
+              itemsList.add(
+               Item(
+                 item.id,
+                 item.orderId,
+                 item.productId,
+                 item.quantity
+               )
               )
               //Log.i("Teste", "Array: $clientsList")
             }
           }
-          continuation.resumeWith(Result.success(ordersList))
+          continuation.resumeWith(Result.success(itemsList))
         }.addOnFailureListener { exception ->
           continuation.resumeWith(Result.failure(exception))
         }
     }
   }
 
-  override suspend fun deleteOrder(id: Int): Int {
+  override suspend fun deleteItem(id: Int): Int {
     return suspendCoroutine { continuation ->
       databaseReference
         .child(id.toString())
@@ -89,7 +89,7 @@ class FirebaseOrderDataSource @Inject constructor(
     }
   }
 
-  override suspend fun getLastOrderId(): Int {
+  override suspend fun getLastItemId(): Int {
     return suspendCoroutine { continuation ->
 
       idReference.get().addOnSuccessListener { snapshot ->
@@ -103,7 +103,7 @@ class FirebaseOrderDataSource @Inject constructor(
     }
   }
 
-  override suspend fun updateLastOrderId(id: Int): Int {
+  override suspend fun updateLastItemId(id: Int): Int {
     return suspendCoroutine { continuation ->
       idReference
         .setValue(id+1)

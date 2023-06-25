@@ -6,33 +6,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.fabricasapatos.principal.ui.theme.FabricaSapatosTheme
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.lifecycle.lifecycleScope
-import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
-import com.example.fabricasapatos.domain.client.usecases.contracts.IGetNameAndCpfClientsUseCase
-import com.example.fabricasapatos.domain.order.usecases.CreateOrderUseCase
-import com.example.fabricasapatos.domain.order.usecases.DeleteOrderUseCase
-import com.example.fabricasapatos.domain.order.usecases.GetOrdersByClientUseCase
-import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUseCase
-import com.example.fabricasapatos.domain.product.usecases.CreateProductUseCase
-import com.example.fabricasapatos.domain.product.usecases.GetProductsUseCase
-import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProductUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
+import com.example.fabricasapatos.ui.activities.client.GetClientsActivity
 import dagger.hilt.android.AndroidEntryPoint
 //import com.fabricasapatos.navigationdrawercompose.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
@@ -43,16 +25,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var getOrdersByClientUseCase: GetOrdersByClientUseCase
-
-    @Inject
-    lateinit var getProductsUseCase: GetProductsUseCase
-
-    @Inject
-    lateinit var createOrderUseCase: CreateOrderUseCase
-
-    @Inject
-    lateinit var createProductUseCase: CreateProductUseCase
+    lateinit var createItemUseCase: ICreateItemUseCase
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +71,7 @@ class MainActivity : ComponentActivity() {
                             ),
                             onItemClick = {
                                 when(it.id){
-                                    "cliente" -> {val intent = Intent(applicationContext, CreateClientActivity::class.java)
+                                    "cliente" -> {val intent = Intent(applicationContext, GetClientsActivity::class.java)
                                     startActivity(intent)}
                                 }
                             }
@@ -107,12 +80,13 @@ class MainActivity : ComponentActivity() {
                 ) {}
             }
         }
-        /*lifecycleScope.launch {
+        lifecycleScope.launch {
             //val product = createProductUseCase("descrevendo o sandalia", 150.0, Uri.EMPTY)
-            //val list = getProductsUseCase()
-            val list = getOrdersByClientUseCase("3")
-            Log.i("TESTE", list.toString())
-            //val order = createOrderUseCase("3")
-        }*/
+            //val list = getDescriptionAndIdProductsUseCase()
+            //val list = getOrdersByClientUseCase("3")
+            //Log.i("TESTE", list.toString())
+            //val order = createOrderUseCase("1")
+            //val item = createItemUseCase(12, 1, 2)
+        }
     }
 }

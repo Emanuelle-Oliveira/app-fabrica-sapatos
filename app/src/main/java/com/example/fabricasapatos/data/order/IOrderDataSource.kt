@@ -8,7 +8,7 @@ interface IOrderDataSource {
 
   suspend fun updateOrder(order: Order): Order
 
-  suspend fun getOrdersByClient(cpfClient: String): List<Order>
+  suspend fun getOrdersByClient(clientCpf: String): List<Order>
 
   suspend fun deleteOrder(id: Int): Int
 

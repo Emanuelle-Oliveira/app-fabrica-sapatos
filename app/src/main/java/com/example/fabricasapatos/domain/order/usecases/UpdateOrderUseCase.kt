@@ -13,14 +13,14 @@ class UpdateOrderUseCase @Inject constructor(
 ): IUpdateOrderUseCase {
   override suspend fun invoke(
     id: Int,
-    cpfClient: String
+    clientCpf: String
   ): Order {
 
     val date = Date()
     val formatDate = SimpleDateFormat("dd-MM-yyyy")
     val dateString: String = formatDate.format(date)
 
-    val order = Order(id, dateString, cpfClient)
+    val order = Order(id, dateString, clientCpf)
     //Log.i("TESTE", order.toString())
     return orderRepository.updateOrder(order)
   }

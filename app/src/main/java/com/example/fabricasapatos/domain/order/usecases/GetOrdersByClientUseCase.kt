@@ -9,7 +9,7 @@ class GetOrdersByClientUseCase @Inject constructor(
   private val orderRepository: OrderRepository
 ): IGetOrdersByClientUseCase {
 
-  override suspend fun invoke(cpfClient: String): List<Order> {
-    return orderRepository.getOrdersByClient(cpfClient)
+  override suspend fun invoke(clientCpf: String): List<Order> {
+    return orderRepository.getOrdersByClient(clientCpf)
   }
 }

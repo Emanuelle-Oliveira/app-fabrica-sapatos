@@ -7,5 +7,5 @@ import java.util.UUID
 data class Order(
   var id: Int,
   var date: String,
-  var cpfClient: String
+  var clientCpf: String
 )

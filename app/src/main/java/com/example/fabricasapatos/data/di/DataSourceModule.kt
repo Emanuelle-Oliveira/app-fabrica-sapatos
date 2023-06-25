@@ -2,6 +2,8 @@ package com.example.fabricasapatos.data.di
 
 import com.example.fabricasapatos.data.client.FirebaseClientDataSource
 import com.example.fabricasapatos.data.client.IClientDataSource
+import com.example.fabricasapatos.data.item.FirebaseItemDataSource
+import com.example.fabricasapatos.data.item.IItemDataSource
 import com.example.fabricasapatos.data.order.FirebaseOrderDataSource
 import com.example.fabricasapatos.data.order.IOrderDataSource
 import com.example.fabricasapatos.data.product.FirebaseProductDataSource
@@ -27,4 +29,8 @@ interface DataSourceModule {
   @Singleton
   @Binds
   fun bindOrderDataSource(dataSource: FirebaseOrderDataSource): IOrderDataSource
+
+  @Singleton
+  @Binds
+  fun bindItemDataSource(dataSource: FirebaseItemDataSource): IItemDataSource
 }

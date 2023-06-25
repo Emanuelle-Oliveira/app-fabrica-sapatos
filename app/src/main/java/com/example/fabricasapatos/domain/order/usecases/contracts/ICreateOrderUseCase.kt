@@ -4,5 +4,5 @@ import com.example.fabricasapatos.domain.order.model.Order
 import java.util.Date
 
 interface ICreateOrderUseCase {
-  suspend operator fun invoke(cpfClient: String): Order
+  suspend operator fun invoke(clientCpf: String): Order
 }
