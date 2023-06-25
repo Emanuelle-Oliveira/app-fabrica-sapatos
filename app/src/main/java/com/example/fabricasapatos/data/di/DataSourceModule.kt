@@ -2,6 +2,8 @@ package com.example.fabricasapatos.data.di
 
 import com.example.fabricasapatos.data.client.FirebaseClientDataSource
 import com.example.fabricasapatos.data.client.IClientDataSource
+import com.example.fabricasapatos.data.product.FirebaseProductDataSource
+import com.example.fabricasapatos.data.product.IProductDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +17,8 @@ interface DataSourceModule {
   @Singleton
   @Binds
   fun bindClientDataSource(dataSource: FirebaseClientDataSource): IClientDataSource
+
+  @Singleton
+  @Binds
+  fun bindProductDataSource(dataSource: FirebaseProductDataSource): IProductDataSource
 }

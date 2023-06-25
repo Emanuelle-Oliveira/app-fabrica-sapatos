@@ -11,12 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
+import com.example.fabricasapatos.principal.ui.theme.FabricaSapatosTheme
 import com.example.fabricasapatos.ui.activities.client.DeleteClientActivity
-import com.example.fabricasapatos.ui.activities.client.GetClientsActivity
-import com.example.fabricasapatos.ui.activities.client.UpdateClientActivity
-import com.example.fabricasapatos.ui.theme.FabricaSapatosTheme
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

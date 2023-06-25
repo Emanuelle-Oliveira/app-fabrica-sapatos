@@ -1,6 +1,5 @@
 package com.example.fabricasapatos.domain.di
 
-import androidx.activity.ComponentActivity
 import com.example.fabricasapatos.domain.client.usecases.CreateClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.DeleteClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.GetClientsUseCase
@@ -9,6 +8,16 @@ import com.example.fabricasapatos.domain.client.usecases.contracts.ICreateClient
 import com.example.fabricasapatos.domain.client.usecases.contracts.IDeleteClientUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IUpdateClientUseCase
+import com.example.fabricasapatos.domain.product.usecases.CreateProductUseCase
+import com.example.fabricasapatos.domain.product.usecases.DeleteProductUseCase
+import com.example.fabricasapatos.domain.product.usecases.GetProductsUseCase
+import com.example.fabricasapatos.domain.product.usecases.UpdateProductUseCase
+import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProductUseCase
+import com.example.fabricasapatos.domain.product.usecases.contracts.IDeleteProductUseCase
+import com.example.fabricasapatos.domain.product.usecases.contracts.IGetProductsUseCase
+import com.example.fabricasapatos.domain.product.usecases.contracts.IUpdateProductUseCase
+import com.example.fabricasapatos.domain.product.usecases.contracts.IUploadProductImageUseCase
+import com.example.fabricasapatos.domain.product.usecases.UploadProductImageUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -29,4 +38,19 @@ interface IDomainModule {
 
   @Binds
   fun bindDeleteClientUseCase(useCase: DeleteClientUseCase): IDeleteClientUseCase
+
+  @Binds
+  fun bindCreateProductUseCase(useCase: CreateProductUseCase): ICreateProductUseCase
+
+  @Binds
+  fun bindUpdateProductUseCase(useCase: UpdateProductUseCase): IUpdateProductUseCase
+
+  @Binds
+  fun bindGetProductsUseCase(useCase: GetProductsUseCase): IGetProductsUseCase
+
+  @Binds
+  fun bindDeleteProductUseCase(useCase: DeleteProductUseCase): IDeleteProductUseCase
+
+  @Binds
+  fun bindUploadProductImageUseCase(useCase: UploadProductImageUseCase): IUploadProductImageUseCase
 }

@@ -16,14 +16,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.lifecycle.lifecycleScope
+import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProductUseCase
 import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
-import com.example.fabricasapatos.ui.activities.client.DeleteClientActivity
+import dagger.hilt.android.AndroidEntryPoint
 //import com.fabricasapatos.navigationdrawercompose.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var createProductUseCase: ICreateProductUseCase
+
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

@@ -1,5 +1,6 @@
 package com.example.fabricasapatos.data.product
 
+import android.net.Uri
 import com.example.fabricasapatos.domain.product.model.Product
 
 interface IProductDataSource {
@@ -11,4 +12,6 @@ interface IProductDataSource {
   suspend fun getProducts(): List<Product>
 
   suspend fun deleteProduct(id: Int): Int
+
+  suspend fun uploadProductImage(imageUri: Uri): String
 }
