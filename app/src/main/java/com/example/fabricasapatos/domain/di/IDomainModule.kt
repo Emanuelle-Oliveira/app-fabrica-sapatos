@@ -11,8 +11,12 @@ import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUs
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetNameAndCpfClientsUseCase
 import com.example.fabricasapatos.domain.client.usecases.contracts.IUpdateClientUseCase
 import com.example.fabricasapatos.domain.item.usecases.CreateItemUseCase
+import com.example.fabricasapatos.domain.item.usecases.DeleteItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.UpdateItemUseCase
+import com.example.fabricasapatos.domain.item.usecases.GetItemsByOrderUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.IDeleteItemUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.IGetItemsByOrderUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateItemUseCase
 import com.example.fabricasapatos.domain.order.usecases.CreateOrderUseCase
 import com.example.fabricasapatos.domain.order.usecases.DeleteOrderUseCase
@@ -97,4 +101,10 @@ interface IDomainModule {
 
   @Binds
   fun bindUpdateItemUseCase(useCase: UpdateItemUseCase): IUpdateItemUseCase
+
+  @Binds
+  fun bindGetItemsByOrderUseCase(useCase: GetItemsByOrderUseCase): IGetItemsByOrderUseCase
+
+  @Binds
+  fun bindDeleteItemUseCase(useCase: DeleteItemUseCase): IDeleteItemUseCase
 }

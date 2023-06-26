@@ -46,7 +46,7 @@ class FirebaseItemDataSource @Inject constructor(
     return suspendCoroutine { continuation ->
       databaseReference
         .orderByChild("orderId")
-        .equalTo(orderId.toString()).get()
+        .equalTo(orderId.toDouble()).get()
         .addOnSuccessListener { snapshot ->
           val itemsList = ArrayList<Item>()
           if (snapshot.exists()) {

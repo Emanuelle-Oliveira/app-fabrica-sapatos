@@ -12,6 +12,6 @@ class UpdateItemUseCase @Inject constructor(
 
   override suspend fun invoke(id: Int, orderId: Int, productId: Int, quantity: Int): Item {
     val item = Item(id, orderId, productId, quantity)
-    return itemRepository.createItem(item)
+    return itemRepository.updateItem(item)
   }
 }
