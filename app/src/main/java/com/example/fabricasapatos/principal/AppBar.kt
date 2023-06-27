@@ -1,5 +1,6 @@
 package com.example.fabricasapatos.principal
 
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,8 +20,8 @@ fun AppBar(
         title = {
             Text(text = "Fabrica de Sapatos")
         },
-        //backgroundColor = MaterialTheme.colors.primary,
-        //contentColor = MaterialTheme.colors.onPrimary,
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.primary,
         navigationIcon = {
             IconButton(onClick = onNavigationIconClick) {
                 Icon(

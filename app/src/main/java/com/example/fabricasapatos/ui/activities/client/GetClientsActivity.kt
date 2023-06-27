@@ -1,6 +1,7 @@
 package com.example.fabricasapatos.ui.activities.client
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -17,21 +18,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.Card
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +41,8 @@ import com.example.fabricasapatos.ui.activities.client.ui.theme.FabricaSapatosTh
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.content.ContextCompat.startActivity
+
 
 @AndroidEntryPoint
 class GetClientsActivity : ComponentActivity() {
@@ -85,6 +85,23 @@ fun Elementos(clientsList: State<List<Client>>){
 
   Column() {
     Scaffold(
+      floatingActionButton = {
+        FloatingActionButton(
+           onClick = {
+            //OnClick Method
+            //val intent = Intent(LocalContext.current, CreateClientActivity::class.java)
+            //startActivity(intent)
+          },
+          containerColor = MaterialTheme.colorScheme.errorContainer,
+          shape = RoundedCornerShape(16.dp),
+        ) {
+          Icon(
+            imageVector = Icons.Rounded.Add,
+            contentDescription = "Add FAB",
+            tint = Color.White,
+          )
+        }
+      },
       content = {
         LazyColumn(
           state = listState,
@@ -96,6 +113,7 @@ fun Elementos(clientsList: State<List<Client>>){
               ItemDaLista(client = it)
             })
         }
+
       }
     )
   }
@@ -105,7 +123,8 @@ fun Elementos(clientsList: State<List<Client>>){
 fun ItemDaLista(client: Client) {
   Card(
     modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp).fillMaxWidth(),
-    shape = RoundedCornerShape(corner = CornerSize(16.dp))
+    shape = RoundedCornerShape(corner = CornerSize(16.dp)),
+    backgroundColor = MaterialTheme.colorScheme.primary
   ) {
     Row {
       Column(
