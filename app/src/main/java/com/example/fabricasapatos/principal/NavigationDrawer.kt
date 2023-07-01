@@ -23,10 +23,10 @@ fun DrawerHeader() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 64.dp),
+            .padding(vertical = 50.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Header", fontSize = 60.sp)
+        Text(text = "Mandala", fontSize = 40.sp)
     }
 }
 
@@ -34,7 +34,7 @@ fun DrawerHeader() {
 fun DrawerBody(
     items: List<MenuItem>,
     modifier: Modifier = Modifier,
-    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp),
+    itemTextStyle: TextStyle = TextStyle(fontSize = 24.sp),
     onItemClick: (MenuItem) -> Unit
 ) {
     LazyColumn(modifier) {
