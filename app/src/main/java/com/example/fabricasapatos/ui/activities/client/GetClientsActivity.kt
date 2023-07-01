@@ -43,6 +43,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import kotlin.reflect.KFunction0
 import kotlin.reflect.KFunction1
+import androidx.compose.material3.AlertDialog
+
 
 
 @AndroidEntryPoint
@@ -106,12 +108,6 @@ class GetClientsActivity : ComponentActivity() {
   }
 }
 
-
-
-@Composable
-fun ExibirDialogExclusaoCliente(client: Client, deleteClient: KFunction1<String, Unit>, getClients: KFunction0<Unit>) {
-  DialogDeleteClient(client, deleteClient, getClients)
-}
 
 @Composable
 fun Tela(clientsList: State<List<Client>>, deleteClient: KFunction1<String, Unit>, getClients: KFunction0<Unit>){
@@ -177,6 +173,11 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
 
   val context = LocalContext.current
 
+  var showDialog by remember { mutableStateOf(false) }
+  if (showDialog) {
+    DialogDeleteClient(client, deleteClient, getClients, onClose = { showDialog = false })
+  }
+
   Card(
     modifier = Modifier
       .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -223,11 +224,9 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
         modifier = Modifier.wrapContentSize(Alignment.CenterEnd)
       ) {
         IconButton(
+
           onClick = {
-            deleteClient(client.cpf)
-            getClients()
-            //ExibirDialogExclusaoCliente(client, deleteClient, getClients)
-           // DialogDeleteClient(client, deleteClient , getClients)
+            showDialog = true
           }
         ) {
           Icon(
@@ -242,12 +241,10 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, getClients: KFunction0<Unit>) {
-  var showDialog by remember { mutableStateOf(true) }
+fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, getClients: KFunction0<Unit>, onClose: () -> Unit) {
 
-  if (showDialog) {
     androidx.compose.material3.AlertDialog(
-      onDismissRequest = { showDialog = false },
+      onDismissRequest =  onClose,
       title = { Text("Excluir cliente") },
       text = { Text("Tem certeza de que deseja excluir este cliente?") },
       confirmButton = {
@@ -255,7 +252,7 @@ fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, 
           onClick = {
             deleteClient(client.cpf)
             getClients()
-            showDialog = false
+            onClose
           }
         ) {
           Text("Confirmar")
@@ -264,12 +261,12 @@ fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, 
       dismissButton = {
         androidx.compose.material3.Button(
           onClick = {
-            showDialog = false
+            //showDialog = false
+            onClose
           }
         ) {
           Text("Cancelar")
         }
       }
     )
-  }
 }

@@ -151,13 +151,20 @@ fun MyScreen(funcao: KFunction1<Client, Unit>) {
       onClick = {
         // Ação do botão
         val client = Client(
-          textField1Value.value.toString(),
-          textField1Value.value.toString(),
-          textField1Value.value.toString(),
-          textField1Value.value.toString(),
-          textField1Value.value.toString()
+          textField1Value.value,
+          textField2Value.value,
+          textField3Value.value,
+          textField4Value.value,
+          textField5Value.value
         )
         funcao(client)
+
+        // Limpar os campos de texto
+        textField1Value.value = ""
+        textField2Value.value = ""
+        textField3Value.value = ""
+        textField4Value.value = ""
+        textField5Value.value = ""
       },
       colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
       modifier = Modifier
