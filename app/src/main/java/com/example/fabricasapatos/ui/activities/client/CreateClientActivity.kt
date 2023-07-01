@@ -80,14 +80,6 @@ class CreateClientActivity(): ComponentActivity() {
       ) {
         MyScreen(::createClient)
       }
-      /*FabricaSapatosTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          //Greeting2("Criar cliente")
-          //FuncaoListaPessoas()
-          MyScreen(::createClient)
-        }
-      }*/
     }
 
   }

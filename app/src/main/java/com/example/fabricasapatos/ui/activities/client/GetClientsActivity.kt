@@ -173,9 +173,14 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
 
   val context = LocalContext.current
 
-  var showDialog by remember { mutableStateOf(false) }
+  /*var showDialog by remember { mutableStateOf(false) }
   if (showDialog) {
     DialogDeleteClient(client, deleteClient, getClients, onClose = { showDialog = false })
+  }*/
+
+  val showDialog = remember { mutableStateOf(false) }
+  if (showDialog.value){
+    DialogDeleteClient(client , deleteClient, getClients , setShowDialog = { showDialog.value = it })
   }
 
   Card(
@@ -211,6 +216,10 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
         IconButton(
           onClick = {
             //context.startActivity(Intent(context, CreateClientActivity::class.java))
+           /*context.startActivity( Intent(context, UpdateClientActivity::class.java).let {
+              it.putStringArrayListExtra("5", client)
+              register.launch(it)
+            })*/
           }
         ) {
           Icon(
@@ -226,7 +235,7 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
         IconButton(
 
           onClick = {
-            showDialog = true
+            showDialog.value = true
           }
         ) {
           Icon(
@@ -241,10 +250,10 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, getClients: KFunction0<Unit>, onClose: () -> Unit) {
+fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, getClients: KFunction0<Unit>,setShowDialog: (Boolean) -> Unit = {}) {
 
     androidx.compose.material3.AlertDialog(
-      onDismissRequest =  onClose,
+      onDismissRequest =  { setShowDialog(false) },//onClose,
       title = { Text("Excluir cliente") },
       text = { Text("Tem certeza de que deseja excluir este cliente?") },
       confirmButton = {
@@ -252,7 +261,7 @@ fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, 
           onClick = {
             deleteClient(client.cpf)
             getClients()
-            onClose
+            setShowDialog(false)
           }
         ) {
           Text("Confirmar")
@@ -262,7 +271,7 @@ fun DialogDeleteClient( client: Client, deleteClient: KFunction1<String, Unit>, 
         androidx.compose.material3.Button(
           onClick = {
             //showDialog = false
-            onClose
+            setShowDialog(false)
           }
         ) {
           Text("Cancelar")
