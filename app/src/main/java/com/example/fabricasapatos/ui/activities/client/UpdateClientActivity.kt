@@ -1,6 +1,7 @@
 package com.example.fabricasapatos.ui.activities.client
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IUpdateClientUseCase
@@ -34,16 +36,18 @@ class UpdateClientActivity : ComponentActivity() {
   @Inject
   lateinit var updateClientUseCase: IUpdateClientUseCase
 
-  val cliente = Client(
-    cpf = "",
-    name = "",
-    phone = "",
-    address = "",
-    instagram = ""
-  )
+
   fun updateClient(client: Client) {
     lifecycleScope.launch {
       updateClientUseCase(client.cpf, client.name, client.phone, client.address, client.instagram)
+    }
+  }
+
+  companion object {
+    fun newIntent(context: FragmentActivity, client: Client): Intent {
+      return Intent(context, UpdateClientActivity::class.java).apply {
+        putExtra("client", client)
+      }
     }
   }
 
@@ -51,6 +55,9 @@ class UpdateClientActivity : ComponentActivity() {
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    val client = intent.getParcelableExtra<Client>("client")
+
     setContent {
       val scaffoldState = rememberScaffoldState()
       val scope = rememberCoroutineScope()
@@ -71,7 +78,9 @@ class UpdateClientActivity : ComponentActivity() {
           NavigationDrawer()
         }
       ) {
-        MyScreen2(::updateClient)
+        if (client != null) {
+          MyScreen2(client,::updateClient)
+        }
       }
     }
 
@@ -81,13 +90,15 @@ class UpdateClientActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyScreen2(funcao: KFunction1<Client, Unit>) {
+fun MyScreen2(client : Client , funcao: KFunction1<Client, Unit>) {
   // Campos de texto para armazenar as informações digitadas pelo usuário
-  val textField1Value = remember { mutableStateOf("") }
-  val textField2Value = remember { mutableStateOf("") }
-  val textField3Value = remember { mutableStateOf("") }
-  val textField4Value = remember { mutableStateOf("") }
-  val textField5Value = remember { mutableStateOf("") }
+  val textField1Value = remember { mutableStateOf(client.cpf) }
+  val textField2Value = remember { mutableStateOf(client.name) }
+  val textField3Value = remember { mutableStateOf(client.phone) }
+  val textField4Value = remember { mutableStateOf(client.address) }
+  val textField5Value = remember { mutableStateOf(client.instagram) }
+
+  val enabled = remember { mutableStateOf(false) }
 
   Column(
     modifier = Modifier
@@ -100,7 +111,8 @@ fun MyScreen2(funcao: KFunction1<Client, Unit>) {
       value = textField1Value.value,
       onValueChange = { textField1Value.value = it },
       label = { Text("CPF") },
-      modifier = Modifier.fillMaxWidth()
+      modifier = Modifier.fillMaxWidth(),
+      enabled = enabled.value
     )
 
     OutlinedTextField(

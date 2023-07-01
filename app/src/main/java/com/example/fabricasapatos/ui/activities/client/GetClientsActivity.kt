@@ -220,6 +220,10 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
               it.putStringArrayListExtra("5", client)
               register.launch(it)
             })*/
+
+            var mochila = Bundle()
+            mochila.putParcelable("client", client)
+            context.startActivity((Intent(context, UpdateClientActivity::class.java)).putExtras(mochila))
           }
         ) {
           Icon(
