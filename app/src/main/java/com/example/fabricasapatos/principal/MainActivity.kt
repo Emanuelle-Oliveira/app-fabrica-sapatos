@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
       //Log.i("TESTE", list.toString())
       //val order = createOrderUseCase("1")
       //val item = createItemUseCase(10, 0, 1)
-      //val client = createClientUseCase("908", "laura", "738948", "rua f", "@laura")
+      val client = createClientUseCase("567", "maria", "738948", "rua x", "@maria")
     }
   }
 }

@@ -19,10 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+//import coil.compose.rememberImagePainter
 import com.example.fabricasapatos.ui.activities.product.ui.theme.FabricaSapatosTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class GetProductsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +67,7 @@ fun AppContent() {
 
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {
             items(selectImages) { uri ->
-                Image(
+                /*Image(
                     painter = rememberImagePainter(uri),
                     contentScale = ContentScale.FillWidth,
                     contentDescription = null,
@@ -76,7 +77,7 @@ fun AppContent() {
                         .clickable {
 
                         }
-                )
+                )*/
             }
         }
 

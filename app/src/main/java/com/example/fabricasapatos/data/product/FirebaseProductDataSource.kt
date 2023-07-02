@@ -13,6 +13,11 @@ import java.util.UUID
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
+private fun generateUniqueFileName(): String {
+  val timestamp = System.currentTimeMillis()
+  return "image_$timestamp.jpg" // Use o timestamp atual para gerar um nome exclusivo
+}
+
 class FirebaseProductDataSource @Inject constructor(
   database: FirebaseDatabase,
   storage: FirebaseStorage
@@ -20,7 +25,7 @@ class FirebaseProductDataSource @Inject constructor(
 
   private val databaseReference: DatabaseReference = database.getReference("product")
   private val idReference: DatabaseReference = database.getReference("lastProductId")
-  private val storageReference: StorageReference = storage.reference
+  private var storageReference: StorageReference = storage.getReference("products")
 
   override suspend fun createProduct(product: Product): Product {
     return suspendCoroutine { continuation ->
@@ -115,8 +120,13 @@ class FirebaseProductDataSource @Inject constructor(
   }
 
   override suspend fun uploadProductImage(imageUri: Uri): String {
+
+    val fileName = generateUniqueFileName()
+    val fileReference = storageReference.child(fileName)
+
     return suspendCoroutine { continuation ->
-      storageReference.putFile(imageUri)
+      fileReference
+        .putFile(imageUri)
         .addOnSuccessListener { taskSnapshot ->
           taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
             val path = uri.toString()

@@ -20,10 +20,12 @@ import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProdu
 import com.example.fabricasapatos.principal.AppBar
 import com.example.fabricasapatos.principal.DrawerHeader
 import com.example.fabricasapatos.principal.NavigationDrawer
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KFunction3
 
+@AndroidEntryPoint
 class CreateProductActivity : ComponentActivity() {
 
     @Inject
