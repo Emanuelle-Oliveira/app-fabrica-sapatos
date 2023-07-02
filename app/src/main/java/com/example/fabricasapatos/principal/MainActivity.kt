@@ -1,25 +1,23 @@
 package com.example.fabricasapatos.principal
 
+//import com.fabricasapatos.navigationdrawercompose.ui.theme.NavigationDrawerComposeTheme
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -28,10 +26,9 @@ import coil.compose.rememberImagePainter
 import com.example.fabricasapatos.domain.client.usecases.contracts.ICreateClientUseCase
 import com.example.fabricasapatos.domain.item.usecases.GetItemsByOrderUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
-import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
 import com.example.fabricasapatos.ui.activities.client.GetClientsActivity
+import com.example.fabricasapatos.ui.activities.product.CreateProductActivity
 import dagger.hilt.android.AndroidEntryPoint
-//import com.fabricasapatos.navigationdrawercompose.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -104,7 +101,6 @@ fun ImageFromUrl(url: String) {
         data = url,
         builder = {
             crossfade(true)
-            //error(ColorPainter(Color.Red)) // Opcional: exibe uma cor em caso de erro no carregamento da imagem
         }
     )
 
@@ -142,6 +138,7 @@ fun NavigationDrawer (){
     onItemClick = {
       when(it.id){
         "cliente" -> {context.startActivity(Intent(context, GetClientsActivity::class.java))}
+        "produto" -> {context.startActivity(Intent(context, CreateProductActivity::class.java))}
       }
     }
   )

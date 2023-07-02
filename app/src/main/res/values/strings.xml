@@ -7,4 +7,5 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_activity_create_product">CreateProductActivity</string>
+    <string name="title_activity_get_products">GetProductsActivity</string>
 </resources>
