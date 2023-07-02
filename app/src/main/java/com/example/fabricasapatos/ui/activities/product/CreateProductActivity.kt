@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
@@ -14,8 +15,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import coil.compose.rememberImagePainter
 import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProductUseCase
 import com.example.fabricasapatos.principal.AppBar
 import com.example.fabricasapatos.principal.DrawerHeader
@@ -119,6 +122,24 @@ fun MyScreen(funcao: KFunction3<String, Double, Uri, Unit>) {
             Text(text = "Pick Image From Gallery")
         }
 
+        selectedImageUri?.let { uri ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = 15.dp, vertical = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = rememberImagePainter(uri),
+                    contentScale = ContentScale.FillWidth,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(16.dp, 8.dp)
+                        .size(100.dp)
+                )
+            }
+        }
 
         // Botão "Salvar"
         Button(

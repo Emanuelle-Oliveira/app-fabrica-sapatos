@@ -8,4 +8,5 @@
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_activity_create_product">CreateProductActivity</string>
     <string name="title_activity_get_products">GetProductsActivity</string>
+    <string name="title_activity_update_product">UpdateProductActivity</string>
 </resources>
