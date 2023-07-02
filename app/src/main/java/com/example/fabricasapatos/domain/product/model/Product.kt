@@ -1,5 +1,5 @@
 package com.example.fabricasapatos.domain.product.model
-
+import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 

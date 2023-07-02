@@ -247,7 +247,7 @@ fun ItemDaLista(productList: State<List<Product>>, product: Product, deleteProdu
 
                         var mochila = Bundle()
                         mochila.putParcelable("product", product)
-                        context.startActivity((Intent(context, UpdateClientActivity::class.java)).putExtras(mochila))
+                        context.startActivity((Intent(context, UpdateProductActivity::class.java)).putExtras(mochila))
                     }
                 ) {
                     Icon(
