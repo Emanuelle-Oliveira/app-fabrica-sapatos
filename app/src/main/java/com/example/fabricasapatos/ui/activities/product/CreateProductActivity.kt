@@ -33,7 +33,8 @@ class CreateProductActivity : ComponentActivity() {
 
     @Inject
     lateinit var createProductUseCase: ICreateProductUseCase
-    
+
+
     fun createProduct(description : String , value : Double , imagem : Uri) {
         lifecycleScope.launch {
             createProductUseCase(description,value,imagem)

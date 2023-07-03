@@ -9,4 +9,6 @@
     <string name="title_activity_create_product">CreateProductActivity</string>
     <string name="title_activity_get_products">GetProductsActivity</string>
     <string name="title_activity_update_product">UpdateProductActivity</string>
+    <string name="title_activity_get_orders">GetOrdersActivity</string>
+    <string name="title_activity_create_order">CreateOrderActivity</string>
 </resources>
