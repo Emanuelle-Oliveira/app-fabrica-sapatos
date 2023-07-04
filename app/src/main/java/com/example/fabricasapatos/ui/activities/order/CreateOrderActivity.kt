@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.rounded.Add
@@ -42,7 +41,6 @@ import com.example.fabricasapatos.principal.NavigationDrawer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.reflect.KFunction0
 import kotlin.reflect.KFunction1
 
 @AndroidEntryPoint
@@ -112,32 +110,7 @@ class CreateOrderActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun DropdownMenuExample(orderList: MutableState<List<Client>>, clientList: KFunction0<Unit>) {
 
-    var expanded by remember { mutableStateOf(false) }
-    var selectedClient by remember { mutableStateOf<Client?>(null) }
-
-    Column {
-        Text(
-            text = "Selected client: ${selectedClient?.name ?: "None"}",
-            modifier = Modifier.padding(16.dp)
-        )
-        TextButton(
-            onClick = { expanded = true },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = selectedClient?.name ?: "Select a client")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-
-        }
-    }
-}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaNovoPedido(funcao: KFunction1<String, Unit>, clientList: MutableState<List<Client>>) {
@@ -155,12 +128,6 @@ fun TelaNovoPedido(funcao: KFunction1<String, Unit>, clientList: MutableState<Li
             .padding(horizontal = 15.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-       /* OutlinedTextField(
-            value = textValueClient.value,
-            onValueChange = { textValueClient.value = it },
-            label = { Text("Cliente") },
-            modifier = Modifier.fillMaxWidth()
-        )*/
         ClientSelect2(
             clientList = clientList,
             selectedClientCpf = selectedClientCpf
