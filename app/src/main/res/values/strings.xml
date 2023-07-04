@@ -4,11 +4,12 @@
     <string name="title_activity_get_clients">GetClientsActivity</string>
     <string name="title_activity_update_client">UpdateClientActivity</string>
     <string name="title_activity_delete_client">DeleteClientActivity</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Sapatos Mandala</string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_activity_create_product">CreateProductActivity</string>
     <string name="title_activity_get_products">GetProductsActivity</string>
     <string name="title_activity_update_product">UpdateProductActivity</string>
     <string name="title_activity_get_orders">GetOrdersActivity</string>
     <string name="title_activity_create_order">CreateOrderActivity</string>
+    <string name="title_activity_update_order">UpdateOrderActivity</string>
 </resources>

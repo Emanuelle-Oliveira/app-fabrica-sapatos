@@ -27,7 +27,7 @@ import com.example.fabricasapatos.domain.client.usecases.contracts.ICreateClient
 import com.example.fabricasapatos.domain.item.usecases.GetItemsByOrderUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.ui.activities.client.GetClientsActivity
-import com.example.fabricasapatos.ui.activities.order.CreateOrderActivity
+import com.example.fabricasapatos.ui.activities.order.GetOrdersActivity
 import com.example.fabricasapatos.ui.activities.product.GetProductsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -140,7 +140,7 @@ fun NavigationDrawer (){
       when(it.id){
         "cliente" -> {context.startActivity(Intent(context, GetClientsActivity::class.java))}
         "produto" -> {context.startActivity(Intent(context, GetProductsActivity::class.java))}
-        "pedido" -> {context.startActivity(Intent(context, CreateOrderActivity::class.java))}
+        "pedido" -> {context.startActivity(Intent(context, GetOrdersActivity::class.java))}
       }
     }
   )

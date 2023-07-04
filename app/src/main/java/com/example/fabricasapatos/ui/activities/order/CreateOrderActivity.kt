@@ -1,5 +1,6 @@
 package com.example.fabricasapatos.ui.activities.order
 
+//import androidx.compose.material.icons.Icons
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,9 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
+import androidx.compose.material.Icon
 import androidx.compose.material.TextButton
-//import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
@@ -34,8 +36,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KFunction0
 import kotlin.reflect.KFunction1
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.Icon
 
 @AndroidEntryPoint
 class CreateOrderActivity : ComponentActivity() {
@@ -228,7 +228,7 @@ fun PedidoCard(pedido: String, numero: Int) {
                 onClick = { quantidade-- },
                 modifier = Modifier.padding(4.dp)
             ) {
-                Icon(Icons.Default.ArrowDropDown, contentDescription = "Diminuir quantidade")
+                Icon(Icons.Default.Remove, contentDescription = "Diminuir quantidade")
             }
             Text(text = quantidade.toString())
             IconButton(

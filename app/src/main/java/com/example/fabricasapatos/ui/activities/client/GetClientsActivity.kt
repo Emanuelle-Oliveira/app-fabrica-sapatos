@@ -1,10 +1,8 @@
 package com.example.fabricasapatos.ui.activities.client
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -29,21 +27,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
-import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 import com.example.fabricasapatos.domain.client.usecases.contracts.IDeleteClientUseCase
+import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.principal.AppBar
 import com.example.fabricasapatos.principal.DrawerHeader
 import com.example.fabricasapatos.principal.NavigationDrawer
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.reflect.KFunction0
 import kotlin.reflect.KFunction1
-import androidx.compose.material3.AlertDialog
 
 
 
@@ -73,14 +66,9 @@ class GetClientsActivity : ComponentActivity() {
   @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
-
-    //val intent = Intent(applicationContext, CreateClientActivity::class.java)
-
     super.onCreate(savedInstanceState)
     getClients()
     setContent {
-      //TopBarTeste()
-      //Tela(clientsList, ::deleteClient, ::getClients)
 
       val scaffoldState = rememberScaffoldState()
       val scope = rememberCoroutineScope()
@@ -173,10 +161,6 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
 
   val context = LocalContext.current
 
-  /*var showDialog by remember { mutableStateOf(false) }
-  if (showDialog) {
-    DialogDeleteClient(client, deleteClient, getClients, onClose = { showDialog = false })
-  }*/
 
   val showDialog = remember { mutableStateOf(false) }
   if (showDialog.value){
