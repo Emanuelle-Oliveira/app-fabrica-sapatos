@@ -199,12 +199,6 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
       ) {
         IconButton(
           onClick = {
-            //context.startActivity(Intent(context, CreateClientActivity::class.java))
-           /*context.startActivity( Intent(context, UpdateClientActivity::class.java).let {
-              it.putStringArrayListExtra("5", client)
-              register.launch(it)
-            })*/
-
             var mochila = Bundle()
             mochila.putParcelable("client", client)
             context.startActivity((Intent(context, UpdateClientActivity::class.java)).putExtras(mochila))

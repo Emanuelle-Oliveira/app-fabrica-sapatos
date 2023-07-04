@@ -10,11 +10,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.fabricasapatos.domain.order.model.Order
 import com.example.fabricasapatos.ui.activities.order.ui.theme.FabricaSapatosTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UpdateOrderActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val order = intent.getParcelableExtra<Order>("order")
         setContent {
             FabricaSapatosTheme {
                 // A surface container using the 'background' color from the theme

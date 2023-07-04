@@ -38,7 +38,6 @@ import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByCl
 import com.example.fabricasapatos.principal.AppBar
 import com.example.fabricasapatos.principal.DrawerHeader
 import com.example.fabricasapatos.principal.NavigationDrawer
-import com.example.fabricasapatos.ui.activities.client.CreateClientActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -133,7 +132,7 @@ fun TelaPedido(
             FloatingActionButton(
                 onClick = {
                     //OnClick Method
-                    context.startActivity(Intent(context, CreateClientActivity::class.java))
+                    context.startActivity(Intent(context, CreateOrderActivity::class.java))
                 },
                 containerColor = MaterialTheme.colorScheme.errorContainer,
                 shape = RoundedCornerShape(16.dp),

@@ -9,14 +9,22 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,7 +103,7 @@ class CreateOrderActivity : ComponentActivity() {
                 }
             ) {
                // DropdownMenuExample(clientsList , ::getClients)
-                TelaNovoPedido(::createOrder)
+                TelaNovoPedido(::createOrder, clientsList)
 
             }
         }
@@ -132,9 +140,12 @@ fun DropdownMenuExample(orderList: MutableState<List<Client>>, clientList: KFunc
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaNovoPedido(funcao: KFunction1<String, Unit>) {
+fun TelaNovoPedido(funcao: KFunction1<String, Unit>, clientList: MutableState<List<Client>>) {
     val textValueClient = remember { mutableStateOf("") }
     val textValueProduct = remember { mutableStateOf("") }
+
+    var selectedClient by remember { mutableStateOf<Client?>(null) }
+    var selectedClientCpf by remember { mutableStateOf("") }
 
     val pedidoList = remember { mutableStateListOf<String>() } // Lista para armazenar os pedidos
 
@@ -144,12 +155,18 @@ fun TelaNovoPedido(funcao: KFunction1<String, Unit>) {
             .padding(horizontal = 15.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        OutlinedTextField(
+       /* OutlinedTextField(
             value = textValueClient.value,
             onValueChange = { textValueClient.value = it },
             label = { Text("Cliente") },
             modifier = Modifier.fillMaxWidth()
-        )
+        )*/
+        ClientSelect2(
+            clientList = clientList,
+            selectedClientCpf = selectedClientCpf
+        ) { client ->
+            selectedClientCpf = client.cpf
+        }
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             OutlinedTextField(
@@ -186,7 +203,7 @@ fun TelaNovoPedido(funcao: KFunction1<String, Unit>) {
         Button(
             onClick = {
                 // Ação do botão
-                funcao(textValueClient.value)
+                funcao(selectedClientCpf)
 
                 // Limpar os campos de texto
                 textValueClient.value = ""
@@ -201,6 +218,48 @@ fun TelaNovoPedido(funcao: KFunction1<String, Unit>) {
         ) {
             Text(text = "Salvar")
         }
+    }
+}
+
+@Composable
+fun ClientItem2(client: Client) {
+    Text(text = client.name)
+}
+
+
+@Composable
+fun ClientSelect2(clientList: MutableState<List<Client>>, selectedClientCpf: String, onClientSelected: (Client) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.wrapContentSize()) {
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.width(250.dp)
+        ) {
+            val selectedClient = clientList.value.find { it.cpf == selectedClientCpf }
+            Text(selectedClient?.name ?: "Selecione um cliente")
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth(),
+            content = {
+                clientList.value.forEachIndexed { index, client ->
+                    DropdownMenuItem(
+                        onClick = {
+                            expanded = false
+                            onClientSelected(client)
+                        },
+                        modifier = Modifier
+                            .width(250.dp)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        ClientItem2(client)
+                    }
+                }
+            }
+        )
     }
 }
 
