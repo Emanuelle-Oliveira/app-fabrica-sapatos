@@ -3,9 +3,11 @@ package com.example.fabricasapatos.ui.activities.client
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -15,6 +17,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
@@ -100,6 +104,8 @@ fun MyScreen2(client : Client , funcao: KFunction1<Client, Unit>) {
 
   val enabled = remember { mutableStateOf(false) }
 
+  val context = LocalContext.current
+
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -127,8 +133,8 @@ fun MyScreen2(client : Client , funcao: KFunction1<Client, Unit>) {
       onValueChange = { textField3Value.value = it },
       label = { Text("Telefone") },
       modifier = Modifier.fillMaxWidth(),
-
-      )
+      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+    )
 
     OutlinedTextField(
       value = textField4Value.value,
@@ -147,22 +153,33 @@ fun MyScreen2(client : Client , funcao: KFunction1<Client, Unit>) {
     // Botão "Atualizar"
     Button(
       onClick = {
-        // Ação do botão
-        val client = Client(
-          textField1Value.value,
-          textField2Value.value,
-          textField3Value.value,
-          textField4Value.value,
-          textField5Value.value
-        )
-        funcao(client)
+        if (
+          textField1Value.value.isNotBlank() &&
+          textField2Value.value.isNotBlank() &&
+          textField3Value.value.isNotBlank() &&
+          textField4Value.value.isNotBlank() &&
+          textField5Value.value.isNotBlank()
+        ) {
+          // Ação do botão
+          val client = Client(
+            textField1Value.value,
+            textField2Value.value,
+            textField3Value.value,
+            textField4Value.value,
+            textField5Value.value
+          )
+          funcao(client)
 
-        // Limpar os campos de texto
-        textField1Value.value = ""
-        textField2Value.value = ""
-        textField3Value.value = ""
-        textField4Value.value = ""
-        textField5Value.value = ""
+          // Limpar os campos de texto
+          textField1Value.value = ""
+          textField2Value.value = ""
+          textField3Value.value = ""
+          textField4Value.value = ""
+          textField5Value.value = ""
+        } else {
+          Toast.makeText(context, "Todos os campos devem estar preenchidos!", Toast.LENGTH_SHORT).show()
+        }
+
       },
       colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
       modifier = Modifier

@@ -189,6 +189,7 @@ fun Elementos(productList: State<List<Product>>, deleteProduct: KFunction1<Int, 
 fun ItemDaLista(productList: State<List<Product>>, product: Product, deleteProduct: KFunction1<Int, Unit>, getProducts: KFunction0<Unit>) {
 
     val context = LocalContext.current
+    val valueString = String.format("%.2f", product.value)
 
     /*var showDialog by remember { mutableStateOf(false) }
     if (showDialog) {
@@ -229,7 +230,7 @@ fun ItemDaLista(productList: State<List<Product>>, product: Product, deleteProdu
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = product.value.toString(),
+                    text = "R$ $valueString",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -329,7 +330,7 @@ fun AppContent() {
                 .wrapContentSize()
                 .padding(10.dp)
         ) {
-            Text(text = "Pick Image From Gallery")
+            Text(text = "Selecionar imagem na galeria")
         }
 
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {

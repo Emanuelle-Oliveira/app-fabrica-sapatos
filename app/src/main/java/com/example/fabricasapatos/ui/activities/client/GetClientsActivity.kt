@@ -161,7 +161,6 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
 
   val context = LocalContext.current
 
-
   val showDialog = remember { mutableStateOf(false) }
   if (showDialog.value){
     DialogDeleteClient(client , deleteClient, getClients , setShowDialog = { showDialog.value = it })
@@ -189,7 +188,7 @@ fun ItemDaLista(clientsList: State<List<Client>>, client: Client, deleteClient: 
           style = typography.titleLarge
         )
         Text(
-          text = client.address,
+          text = "CPF: ${client.cpf.toString()}",
           style = typography.bodySmall
         )
       }

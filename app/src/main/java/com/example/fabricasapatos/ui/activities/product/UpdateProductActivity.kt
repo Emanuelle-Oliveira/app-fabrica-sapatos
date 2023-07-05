@@ -3,12 +3,14 @@ package com.example.fabricasapatos.ui.activities.product
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import coil.compose.rememberImagePainter
@@ -89,14 +93,12 @@ fun MyScreen3(product: Product, funcao: KFunction4<Int, String, Double, Uri, Uni
 
     var imageUrl by remember { mutableStateOf(product.imageUrl) }
 
-
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             selectedImageUri = uri
         }
 
-
-
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -118,13 +120,13 @@ fun MyScreen3(product: Product, funcao: KFunction4<Int, String, Double, Uri, Uni
             onValueChange = { textField2Value.value = it },
             label = { Text("Descrição") },
             modifier = Modifier.fillMaxWidth(),
-
             )
         OutlinedTextField(
             value = textField3Value.value,
             onValueChange = { textField3Value.value = it },
             label = { Text("Valor") },
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Button(
             onClick = { galleryLauncher.launch("image/*") },
@@ -134,7 +136,7 @@ fun MyScreen3(product: Product, funcao: KFunction4<Int, String, Double, Uri, Uni
                 .align(Alignment.CenterHorizontally)
                 .padding(10.dp)
         ) {
-            Text(text = "Pick Image From Gallery")
+            Text(text = "Selecione a imagem da galeria")
         }
 
         selectedImageUri?.let { uri ->
@@ -159,15 +161,27 @@ fun MyScreen3(product: Product, funcao: KFunction4<Int, String, Double, Uri, Uni
         // Botão "Salvar"
         Button(
             onClick = {
-                // Ação do botão
-                selectedImageUri?.let { uri ->
-                    funcao(textField1Value.value.toInt(), textField2Value.value, textField3Value.value.toDouble(), uri)
+                if (
+                    textField1Value.value.isNotBlank() &&
+                    textField2Value.value.isNotBlank() &&
+                    selectedImageUri != null
+                ) {
+                    // Ação do botão
+                    selectedImageUri?.let { uri ->
+                        funcao(
+                            textField1Value.value.toInt(),
+                            textField2Value.value,
+                            textField3Value.value.toDouble(),
+                            uri
+                        )
+                    }
+                    // Limpar os campos de texto
+                    textField1Value.value = ""
+                    textField2Value.value = ""
+                    textField3Value.value = ""
+                } else {
+                    Toast.makeText(context, "Todos os campos devem estar preenchidos!", Toast.LENGTH_SHORT).show()
                 }
-                // Limpar os campos de texto
-                textField1Value.value = ""
-                textField2Value.value = ""
-                textField2Value.value = ""
-
             },
             colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
             modifier = Modifier

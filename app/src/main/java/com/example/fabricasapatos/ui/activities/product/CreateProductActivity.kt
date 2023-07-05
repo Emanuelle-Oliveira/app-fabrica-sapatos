@@ -3,12 +3,14 @@ package com.example.fabricasapatos.ui.activities.product
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import coil.compose.rememberImagePainter
@@ -33,7 +37,6 @@ class CreateProductActivity : ComponentActivity() {
 
     @Inject
     lateinit var createProductUseCase: ICreateProductUseCase
-
 
     fun createProduct(description : String , value : Double , imagem : Uri) {
         lifecycleScope.launch {
@@ -64,13 +67,10 @@ class CreateProductActivity : ComponentActivity() {
                     NavigationDrawer()
                 }
             ) {
-
                 MyScreen(::createProduct)
             }
-
         }
     }
-
 }
 
 @SuppressLint("UnrememberedMutableState")
@@ -88,8 +88,7 @@ fun MyScreen(funcao: KFunction3<String, Double, Uri, Unit>) {
             selectedImageUri = uri
         }
 
-
-
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -110,17 +109,20 @@ fun MyScreen(funcao: KFunction3<String, Double, Uri, Unit>) {
             onValueChange = { textField2Value.value = it },
             label = { Text("Valor") },
             modifier = Modifier.fillMaxWidth(),
-
-            )
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
         Button(
             onClick = { galleryLauncher.launch("image/*") },
-            colors =  ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.surfaceTint),
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.surfaceTint
+            ),
             modifier = Modifier
                 .wrapContentSize()
                 .align(Alignment.CenterHorizontally)
                 .padding(10.dp)
         ) {
-            Text(text = "Pick Image From Gallery")
+            Text(text = "Selecione a imagem da galeria")
         }
 
         selectedImageUri?.let { uri ->
@@ -145,16 +147,26 @@ fun MyScreen(funcao: KFunction3<String, Double, Uri, Unit>) {
         // Botão "Salvar"
         Button(
             onClick = {
-                // Ação do botão
-                selectedImageUri?.let { uri ->
-                    funcao(textField1Value.value, textField2Value.value.toDouble(), uri)
+                if (
+                    textField1Value.value.isNotBlank() &&
+                    textField2Value.value.isNotBlank() &&
+                    selectedImageUri != null
+                ) {
+                    // Ação do botão
+                    selectedImageUri?.let { uri ->
+                        funcao(textField1Value.value, textField2Value.value.toDouble(), uri)
+                    }
+                    // Limpar os campos de texto
+                    textField1Value.value = ""
+                    textField2Value.value = ""
+                } else {
+                    Toast.makeText(context, "Todos os campos devem estar preenchidos!", Toast.LENGTH_SHORT).show()
                 }
-                // Limpar os campos de texto
-                textField1Value.value = ""
-                textField2Value.value = ""
-
             },
-            colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.errorContainer
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Start) // Ajuste o alinhamento vertical aqui
@@ -162,7 +174,6 @@ fun MyScreen(funcao: KFunction3<String, Double, Uri, Unit>) {
         ) {
             Text(text = "Salvar")
         }
-
     }
 }
 
