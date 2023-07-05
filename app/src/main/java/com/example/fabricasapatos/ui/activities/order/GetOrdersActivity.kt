@@ -310,16 +310,26 @@ fun ClientItem(client: Client) {
 
 
 @Composable
-fun ClientSelect( getOrderByCpf: KFunction1<String, Unit>, clientList: MutableState<List<Client>>, selectedClientCpf: String, onClientSelected: (Client) -> Unit) {
+fun ClientSelect(
+    getOrderByCpf: KFunction1<String, Unit>,
+    clientList: MutableState<List<Client>>,
+    selectedClientCpf: String,
+    onClientSelected: (Client) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     var cpf by remember { mutableStateOf(selectedClientCpf) }
+
+    fun getSelectedClientName(): String {
+        val selectedClient = clientList.value.find { it.cpf == cpf }
+        return selectedClient?.name ?: "Selecione um cliente"
+    }
 
     Box(modifier = Modifier.wrapContentSize()) {
         OutlinedButton(
             onClick = { expanded = true },
             modifier = Modifier.width(250.dp)
         ) {
-            Text(cpf.takeIf { it.isNotEmpty() } ?: "Selecione um cliente")
+            Text(getSelectedClientName())
         }
 
         DropdownMenu(
@@ -346,6 +356,7 @@ fun ClientSelect( getOrderByCpf: KFunction1<String, Unit>, clientList: MutableSt
         )
     }
 }
+
 
 
 
