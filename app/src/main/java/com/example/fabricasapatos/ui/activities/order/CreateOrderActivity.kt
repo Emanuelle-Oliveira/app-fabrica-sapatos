@@ -3,6 +3,7 @@ package com.example.fabricasapatos.ui.activities.order
 //import androidx.compose.material.icons.Icons
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -22,7 +23,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,6 +35,8 @@ import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUs
 import com.example.fabricasapatos.domain.order.model.Order
 import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUseCase
 import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByClientUseCase
+import com.example.fabricasapatos.domain.product.model.Product
+import com.example.fabricasapatos.domain.product.usecases.contracts.IGetProductsUseCase
 import com.example.fabricasapatos.principal.AppBar
 import com.example.fabricasapatos.principal.DrawerHeader
 import com.example.fabricasapatos.principal.NavigationDrawer
@@ -55,8 +57,12 @@ class CreateOrderActivity : ComponentActivity() {
     @Inject
     lateinit var createOrderUseCase: ICreateOrderUseCase
 
+    @Inject
+    lateinit var getProductsUseCase: IGetProductsUseCase
+
     private var orderList = mutableStateOf(emptyList<Order>())
     private val clientsList = mutableStateOf(emptyList<Client>())
+    private val productList = mutableStateOf(emptyList<Product>())
 
     fun getOrders(clientCpf : String){
         lifecycleScope.launch {
@@ -75,11 +81,19 @@ class CreateOrderActivity : ComponentActivity() {
             createOrderUseCase(clientCpf)
         }
     }
+
+    fun getProducts() {
+        lifecycleScope.launch {
+            productList.value = getProductsUseCase()
+        }
+    }
+
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getClients()
+        getProducts()
         setContent {
             val scaffoldState = rememberScaffoldState()
             val scope = rememberCoroutineScope()
@@ -100,8 +114,8 @@ class CreateOrderActivity : ComponentActivity() {
                     NavigationDrawer()
                 }
             ) {
-               // DropdownMenuExample(clientsList , ::getClients)
-                TelaNovoPedido(::createOrder, clientsList)
+                // DropdownMenuExample(clientsList , ::getClients)
+                TelaNovoPedido(::createOrder, clientsList , productList )
 
             }
         }
@@ -113,12 +127,18 @@ class CreateOrderActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaNovoPedido(funcao: KFunction1<String, Unit>, clientList: MutableState<List<Client>>) {
+fun TelaNovoPedido(
+    funcao: KFunction1<String, Unit>,
+    clientList: MutableState<List<Client>>,
+    productList: MutableState<List<Product>>
+) {
     val textValueClient = remember { mutableStateOf("") }
     val textValueProduct = remember { mutableStateOf("") }
 
     var selectedClient by remember { mutableStateOf<Client?>(null) }
     var selectedClientCpf by remember { mutableStateOf("") }
+    var selectedProduct by remember  { mutableStateOf<Product?>(null) }
+    var selectedProductId by remember { mutableStateOf(null) }
 
     val pedidoList = remember { mutableStateListOf<String>() } // Lista para armazenar os pedidos
 
@@ -136,18 +156,24 @@ fun TelaNovoPedido(funcao: KFunction1<String, Unit>, clientList: MutableState<Li
         }
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            OutlinedTextField(
-                value = textValueProduct.value,
-                onValueChange = { textValueProduct.value = it },
-                label = { Text("Pedido") },
-                modifier = Modifier.weight(1f)
-            )
+            ProductSelect(
+                productList = productList,
+                selectedProduct = selectedProduct
+            ) { product ->
+                selectedProduct = product
+            }
+            /*  OutlinedTextField(
+                  value = textValueProduct.value,
+                  onValueChange = { textValueProduct.value = it },
+                  label = { Text("Pedido") },
+                  modifier = Modifier.weight(1f)
+              )*/
             Button(
                 onClick = {
                     // Adicionar o valor do OutlinedTextField à lista de pedidos
-                    pedidoList.add(textValueProduct.value)
+                    pedidoList.add(selectedProduct?.description.toString())
+                    Log.i("teste", selectedProduct?.id.toString())
                     // Limpar o campo de texto após adicionar o pedido
-                    textValueProduct.value = ""
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.padding(start = 8.dp)
@@ -172,10 +198,6 @@ fun TelaNovoPedido(funcao: KFunction1<String, Unit>, clientList: MutableState<Li
                 // Ação do botão
                 funcao(selectedClientCpf)
 
-                // Limpar os campos de texto
-                textValueClient.value = ""
-                textValueProduct.value = ""
-
             },
             colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
             modifier = Modifier
@@ -187,6 +209,51 @@ fun TelaNovoPedido(funcao: KFunction1<String, Unit>, clientList: MutableState<Li
         }
     }
 }
+
+@Composable
+fun ProductSelect(
+    productList: MutableState<List<Product>>,
+    selectedProduct: Product?,
+    onProductSelected: (Product) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.wrapContentSize()) {
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.width(250.dp)
+        ) {
+            Text(selectedProduct?.description ?: "Selecione um produto")
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth(),
+            content = {
+                productList.value.forEachIndexed { index, product ->
+                    DropdownMenuItem(
+                        onClick = {
+                            expanded = false
+                            onProductSelected(product)
+                        },
+                        modifier = Modifier
+                            .width(250.dp)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        ProductItem(product)
+                    }
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun ProductItem(product: Product) {
+    Text(text = product.description)
+}
+
 
 @Composable
 fun ClientItem2(client: Client) {

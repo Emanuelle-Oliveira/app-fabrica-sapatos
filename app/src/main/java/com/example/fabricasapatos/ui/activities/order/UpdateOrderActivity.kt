@@ -2,6 +2,7 @@ package com.example.fabricasapatos.ui.activities.order
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -116,11 +117,14 @@ fun TelaUpdatePedido(funcao: KFunction2<Int, String, Unit>, clientList: MutableS
             .padding(horizontal = 15.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        ClientSelect3(
-            clientList = clientList,
-            selectedClientCpf = selectedClientCpf
-        ) { client ->
-            selectedClientCpf = client.cpf
+        if (order != null) {
+            ClientSelect3(
+                orderClientCpf = order.clientCpf,
+                clientList = clientList,
+                selectedClientCpf = selectedClientCpf
+            ) { client ->
+                selectedClientCpf = client.cpf
+            }
         }
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -179,7 +183,16 @@ fun TelaUpdatePedido(funcao: KFunction2<Int, String, Unit>, clientList: MutableS
 
 
 @Composable
-fun ClientSelect3(clientList: MutableState<List<Client>>, selectedClientCpf: String, onClientSelected: (Client) -> Unit) {
+fun ClientSelect3(orderClientCpf : String, clientList: MutableState<List<Client>>, selectedClientCpf: String, onClientSelected: (Client) -> Unit) {
+
+    var clientName = "aa"
+    for(client in clientList.value) {
+        Log.i("teste", client.cpf)
+        if(client.cpf == orderClientCpf ) {
+            clientName = client.name
+        }
+    }
+
     var expanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.wrapContentSize()) {
@@ -188,7 +201,7 @@ fun ClientSelect3(clientList: MutableState<List<Client>>, selectedClientCpf: Str
             onClick = { expanded = true },
             modifier = Modifier.width(250.dp)
         ) {
-            Text(selectedClient?.name ?: "Selecione um cliente")
+            Text(selectedClient?.name ?: clientName)
         }
 
         DropdownMenu(
