@@ -155,7 +155,7 @@ fun TelaUpdatePedido(funcao: KFunction2<Int, String, Unit>, clientList: MutableS
         // LazyColumn para exibir os valores da lista de pedidos
         LazyColumn {
             itemsIndexed(pedidoList) { index, pedido ->
-                PedidoCard(pedido = pedido, numero = index + 1)
+               // PedidoCard(pedido = pedido, numero = index + 1)
             }
         }
         // Botão "Salvar"

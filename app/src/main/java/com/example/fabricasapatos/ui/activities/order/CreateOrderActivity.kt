@@ -3,7 +3,6 @@ package com.example.fabricasapatos.ui.activities.order
 //import androidx.compose.material.icons.Icons
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -32,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.domain.order.model.Order
 import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUseCase
 import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByClientUseCase
@@ -44,6 +44,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KFunction1
+import kotlin.reflect.KFunction2
 
 @AndroidEntryPoint
 class CreateOrderActivity : ComponentActivity() {
@@ -56,6 +57,9 @@ class CreateOrderActivity : ComponentActivity() {
 
     @Inject
     lateinit var createOrderUseCase: ICreateOrderUseCase
+
+    @Inject
+    lateinit var createItemUseCase: ICreateItemUseCase
 
     @Inject
     lateinit var getProductsUseCase: IGetProductsUseCase
@@ -79,6 +83,12 @@ class CreateOrderActivity : ComponentActivity() {
     fun createOrder(clientCpf : String) {
         lifecycleScope.launch {
             createOrderUseCase(clientCpf)
+        }
+    }
+
+    fun createItem(productId : Int , quantity : Int) {
+        lifecycleScope.launch {
+            createItemUseCase(productId, quantity)
         }
     }
 
@@ -115,7 +125,7 @@ class CreateOrderActivity : ComponentActivity() {
                 }
             ) {
                 // DropdownMenuExample(clientsList , ::getClients)
-                TelaNovoPedido(::createOrder, clientsList , productList )
+                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem)
 
             }
         }
@@ -128,9 +138,10 @@ class CreateOrderActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaNovoPedido(
-    funcao: KFunction1<String, Unit>,
+    createOrder: KFunction1<String, Unit>,
     clientList: MutableState<List<Client>>,
-    productList: MutableState<List<Product>>
+    productList: MutableState<List<Product>>,
+    createItem: KFunction2<Int, Int, Unit>
 ) {
     val textValueClient = remember { mutableStateOf("") }
     val textValueProduct = remember { mutableStateOf("") }
@@ -139,7 +150,7 @@ fun TelaNovoPedido(
     var selectedClientCpf by remember { mutableStateOf("") }
     var selectedProduct by remember  { mutableStateOf<Product?>(null) }
     var selectedProductId by remember { mutableStateOf(null) }
-
+    var quantity : Int = 0
     val pedidoList = remember { mutableStateListOf<String>() } // Lista para armazenar os pedidos
 
     Column(
@@ -162,18 +173,10 @@ fun TelaNovoPedido(
             ) { product ->
                 selectedProduct = product
             }
-            /*  OutlinedTextField(
-                  value = textValueProduct.value,
-                  onValueChange = { textValueProduct.value = it },
-                  label = { Text("Pedido") },
-                  modifier = Modifier.weight(1f)
-              )*/
             Button(
                 onClick = {
                     // Adicionar o valor do OutlinedTextField à lista de pedidos
                     pedidoList.add(selectedProduct?.description.toString())
-                    Log.i("teste", selectedProduct?.id.toString())
-                    // Limpar o campo de texto após adicionar o pedido
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.padding(start = 8.dp)
@@ -189,14 +192,18 @@ fun TelaNovoPedido(
         // LazyColumn para exibir os valores da lista de pedidos
         LazyColumn {
             itemsIndexed(pedidoList) { index, pedido ->
-                PedidoCard(pedido = pedido, numero = index + 1)
+                PedidoCard(pedido = pedido, numero = index + 1, quantidade = quantity) { novaQuantidade ->
+                    quantity = novaQuantidade
+                }
             }
         }
+
         // Botão "Salvar"
         Button(
             onClick = {
                 // Ação do botão
-                funcao(selectedClientCpf)
+                createOrder(selectedClientCpf)
+                selectedProduct?.id?.let { createItem(it.toInt() , quantity) }
 
             },
             colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
@@ -298,38 +305,50 @@ fun ClientSelect2(clientList: MutableState<List<Client>>, selectedClientCpf: Str
 }
 
 @Composable
-fun PedidoCard(pedido: String, numero: Int) {
-    var quantidade by remember { mutableStateOf(1) }
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
+fun PedidoCard(
+    pedido: String,
+    numero: Int,
+    quantidade: Int,
+    onQuantidadeChanged: (Int) -> Unit
+) {
+    var quantidadeAtual by remember { mutableStateOf(quantidade) }
+
+    Card {
         Row(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "$numero",
-                modifier = Modifier.width(40.dp)
+                text = " $numero: $pedido",
+                modifier = Modifier.weight(1f)
             )
-            Text(text = pedido, modifier = Modifier.weight(1f))
             IconButton(
-                onClick = { quantidade-- },
-                modifier = Modifier.padding(4.dp)
+                onClick = {
+                    quantidadeAtual -= 1
+                    onQuantidadeChanged(quantidadeAtual)
+                }
             ) {
-                Icon(Icons.Default.Remove, contentDescription = "Diminuir quantidade")
+                Icon(
+                    imageVector = Icons.Default.Remove,
+                    contentDescription = "Remover"
+                )
             }
-            Text(text = quantidade.toString())
+            Text(text = quantidadeAtual.toString())
             IconButton(
-                onClick = { quantidade++ },
-                modifier = Modifier.padding(4.dp)
+                onClick = {
+                    quantidadeAtual += 1
+                    onQuantidadeChanged(quantidadeAtual)
+                }
             ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Aumentar quantidade")
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = "Adicionar"
+                )
             }
         }
     }
 }
+
+
