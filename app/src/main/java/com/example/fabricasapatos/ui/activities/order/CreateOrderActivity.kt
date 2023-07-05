@@ -32,6 +32,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastItemIdUseCase
 import com.example.fabricasapatos.domain.order.model.Order
 import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUseCase
 import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByClientUseCase
@@ -44,7 +45,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KFunction1
-import kotlin.reflect.KFunction2
+import kotlin.reflect.KFunction3
+
+data class ItemTeste (
+    val productId: Int,
+    var quantity: Int
+)
 
 @AndroidEntryPoint
 class CreateOrderActivity : ComponentActivity() {
@@ -64,9 +70,14 @@ class CreateOrderActivity : ComponentActivity() {
     @Inject
     lateinit var getProductsUseCase: IGetProductsUseCase
 
+    @Inject
+    lateinit var getLastItemIdUseCase: IGetLastItemIdUseCase
+
     private var orderList = mutableStateOf(emptyList<Order>())
     private val clientsList = mutableStateOf(emptyList<Client>())
     private val productList = mutableStateOf(emptyList<Product>())
+
+    var lastItemId = mutableStateOf(0)
 
     fun getOrders(clientCpf : String){
         lifecycleScope.launch {
@@ -86,9 +97,9 @@ class CreateOrderActivity : ComponentActivity() {
         }
     }
 
-    fun createItem(productId : Int , quantity : Int) {
+    fun createItem(id: Int, productId : Int , quantity : Int) {
         lifecycleScope.launch {
-            createItemUseCase(productId, quantity)
+            createItemUseCase(id, productId, quantity)
         }
     }
 
@@ -98,12 +109,19 @@ class CreateOrderActivity : ComponentActivity() {
         }
     }
 
+    fun getLastItemId() {
+        lifecycleScope.launch {
+            lastItemId.value = getLastItemIdUseCase()
+        }
+    }
+
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getClients()
         getProducts()
+        getLastItemId()
         setContent {
             val scaffoldState = rememberScaffoldState()
             val scope = rememberCoroutineScope()
@@ -125,12 +143,9 @@ class CreateOrderActivity : ComponentActivity() {
                 }
             ) {
                 // DropdownMenuExample(clientsList , ::getClients)
-                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem)
-
+                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem, lastItemId)
             }
         }
-
-
     }
 }
 
@@ -141,7 +156,8 @@ fun TelaNovoPedido(
     createOrder: KFunction1<String, Unit>,
     clientList: MutableState<List<Client>>,
     productList: MutableState<List<Product>>,
-    createItem: KFunction2<Int, Int, Unit>
+    createItem: KFunction3<Int, Int, Int, Unit>,
+    lastItemId: MutableState<Int>
 ) {
     val textValueClient = remember { mutableStateOf("") }
     val textValueProduct = remember { mutableStateOf("") }
@@ -150,8 +166,8 @@ fun TelaNovoPedido(
     var selectedClientCpf by remember { mutableStateOf("") }
     var selectedProduct by remember  { mutableStateOf<Product?>(null) }
     var selectedProductId by remember { mutableStateOf(null) }
-    var quantity : Int = 0
-    val pedidoList = remember { mutableStateListOf<String>() } // Lista para armazenar os pedidos
+    var quantity : Int = 1
+    val pedidoList = remember { mutableStateListOf<ItemTeste>() } // Lista para armazenar os pedidos
 
     Column(
         modifier = Modifier
@@ -176,7 +192,9 @@ fun TelaNovoPedido(
             Button(
                 onClick = {
                     // Adicionar o valor do OutlinedTextField à lista de pedidos
-                    pedidoList.add(selectedProduct?.description.toString())
+                    selectedProduct?.let {
+                        pedidoList.add(ItemTeste(it.id.toInt(), quantity))
+                    }
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.padding(start = 8.dp)
@@ -192,8 +210,13 @@ fun TelaNovoPedido(
         // LazyColumn para exibir os valores da lista de pedidos
         LazyColumn {
             itemsIndexed(pedidoList) { index, pedido ->
-                PedidoCard(pedido = pedido, numero = index + 1, quantidade = quantity) { novaQuantidade ->
-                    quantity = novaQuantidade
+                PedidoCard(
+                    pedido = pedido,
+                    productList = productList.value,
+                    numero = index + 1,
+                    quantidade = pedido.quantity
+                ) { novaQuantidade ->
+                    pedido.quantity = novaQuantidade
                 }
             }
         }
@@ -203,8 +226,12 @@ fun TelaNovoPedido(
             onClick = {
                 // Ação do botão
                 createOrder(selectedClientCpf)
-                selectedProduct?.id?.let { createItem(it.toInt() , quantity) }
 
+                pedidoList.forEach { item ->
+                    //Log.i("teste", item.toString())
+                    var item = createItem(lastItemId.value+1, item.productId, item.quantity)
+                    lastItemId.value += 1
+                }
             },
             colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
             modifier = Modifier
@@ -306,12 +333,14 @@ fun ClientSelect2(clientList: MutableState<List<Client>>, selectedClientCpf: Str
 
 @Composable
 fun PedidoCard(
-    pedido: String,
+    pedido: ItemTeste,
+    productList: List<Product>,
     numero: Int,
     quantidade: Int,
-    onQuantidadeChanged: (Int) -> Unit
+    onQuantityChanged: (Int) -> Unit
 ) {
     var quantidadeAtual by remember { mutableStateOf(quantidade) }
+    val product = productList.find { it.id == pedido.productId.toInt() }
 
     Card {
         Row(
@@ -321,13 +350,13 @@ fun PedidoCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = " $numero: $pedido",
+                text = " $numero: ${product?.description}",
                 modifier = Modifier.weight(1f)
             )
             IconButton(
                 onClick = {
                     quantidadeAtual -= 1
-                    onQuantidadeChanged(quantidadeAtual)
+                    onQuantityChanged(quantidadeAtual)
                 }
             ) {
                 Icon(
@@ -339,7 +368,7 @@ fun PedidoCard(
             IconButton(
                 onClick = {
                     quantidadeAtual += 1
-                    onQuantidadeChanged(quantidadeAtual)
+                    onQuantityChanged(quantidadeAtual)
                 }
             ) {
                 Icon(
@@ -350,5 +379,3 @@ fun PedidoCard(
         }
     }
 }
-
-

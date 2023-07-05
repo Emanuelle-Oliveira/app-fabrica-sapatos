@@ -14,9 +14,11 @@ import com.example.fabricasapatos.domain.item.usecases.CreateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.DeleteItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.UpdateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.GetItemsByOrderUseCase
+import com.example.fabricasapatos.domain.item.usecases.GetLastItemIdUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IDeleteItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IGetItemsByOrderUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastItemIdUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateItemUseCase
 import com.example.fabricasapatos.domain.order.usecases.CreateOrderUseCase
 import com.example.fabricasapatos.domain.order.usecases.DeleteOrderUseCase
@@ -107,4 +109,7 @@ interface IDomainModule {
 
   @Binds
   fun bindDeleteItemUseCase(useCase: DeleteItemUseCase): IDeleteItemUseCase
+
+  @Binds
+  fun bindGetLastItemIdUseCase(useCase: GetLastItemIdUseCase): IGetLastItemIdUseCase
 }
