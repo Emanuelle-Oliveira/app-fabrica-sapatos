@@ -15,4 +15,6 @@ interface IItemDataSource {
   suspend fun getLastItemId(): Int
 
   suspend fun updateLastItemId(id: Int): Int
+
+  suspend fun updateLastItemId2(id: Int, size: Int): Int
 }

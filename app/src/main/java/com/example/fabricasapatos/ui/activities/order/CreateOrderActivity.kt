@@ -33,6 +33,7 @@ import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastItemIdUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateLastItemIdUseCase2
 import com.example.fabricasapatos.domain.order.model.Order
 import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUseCase
 import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByClientUseCase
@@ -73,6 +74,9 @@ class CreateOrderActivity : ComponentActivity() {
     @Inject
     lateinit var getLastItemIdUseCase: IGetLastItemIdUseCase
 
+    @Inject
+    lateinit var updateLastItemIdUseCase2: IUpdateLastItemIdUseCase2
+
     private var orderList = mutableStateOf(emptyList<Order>())
     private val clientsList = mutableStateOf(emptyList<Client>())
     private val productList = mutableStateOf(emptyList<Product>())
@@ -103,6 +107,7 @@ class CreateOrderActivity : ComponentActivity() {
         }
     }
 
+
     fun getProducts() {
         lifecycleScope.launch {
             productList.value = getProductsUseCase()
@@ -112,6 +117,12 @@ class CreateOrderActivity : ComponentActivity() {
     fun getLastItemId() {
         lifecycleScope.launch {
             lastItemId.value = getLastItemIdUseCase()
+        }
+    }
+
+    fun updateLastItemId(id: Int, size : Int) {
+        lifecycleScope.launch {
+            updateLastItemIdUseCase2(id, size)
         }
     }
 
@@ -143,7 +154,7 @@ class CreateOrderActivity : ComponentActivity() {
                 }
             ) {
                 // DropdownMenuExample(clientsList , ::getClients)
-                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem, lastItemId)
+                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem, lastItemId, ::updateLastItemId)
             }
         }
     }
@@ -157,7 +168,8 @@ fun TelaNovoPedido(
     clientList: MutableState<List<Client>>,
     productList: MutableState<List<Product>>,
     createItem: KFunction3<Int, Int, Int, Unit>,
-    lastItemId: MutableState<Int>
+    lastItemId: MutableState<Int>,
+    updateLastItemId: (Int, Int) -> Unit
 ) {
     val textValueClient = remember { mutableStateOf("") }
     val textValueProduct = remember { mutableStateOf("") }
@@ -226,6 +238,8 @@ fun TelaNovoPedido(
             onClick = {
                 // Ação do botão
                 createOrder(selectedClientCpf)
+
+                updateLastItemId(lastItemId.value, pedidoList.size)
 
                 pedidoList.forEach { item ->
                     //Log.i("teste", item.toString())

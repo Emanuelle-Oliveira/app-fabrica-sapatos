@@ -118,4 +118,17 @@ class FirebaseItemDataSource @Inject constructor(
         }
     }
   }
+
+  override suspend fun updateLastItemId2(id: Int, size: Int): Int {
+    return suspendCoroutine { continuation ->
+      idReference
+        .setValue(id+size)
+        .addOnSuccessListener {
+          continuation.resumeWith(Result.success(id+size))
+        }
+        .addOnFailureListener{exception ->
+          continuation.resumeWith(Result.failure(exception))
+        }
+    }
+  }
 }

@@ -21,4 +21,6 @@ class ItemRepository @Inject constructor(
   suspend fun getLastItemId(): Int = dataSource.getLastItemId()
 
   suspend fun updateLastItemId(id: Int): Int = dataSource.updateLastItemId(id)
+
+  suspend fun updateLastItemId2(id: Int, size: Int): Int = dataSource.updateLastItemId2(id, size)
 }
