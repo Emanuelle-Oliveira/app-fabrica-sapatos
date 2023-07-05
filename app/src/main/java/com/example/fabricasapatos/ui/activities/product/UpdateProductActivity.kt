@@ -139,14 +139,15 @@ fun MyScreen3(product: Product, funcao: KFunction4<Int, String, Double, Uri, Uni
             Text(text = "Selecione a imagem da galeria")
         }
 
-        selectedImageUri?.let { uri ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 15.dp, vertical = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
+                .padding(horizontal = 15.dp, vertical = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            ImageFromUrl3(product.imageUrl)
+            selectedImageUri?.let { uri ->
                 Image(
                     painter = rememberImagePainter(uri),
                     contentScale = ContentScale.FillWidth,
@@ -197,3 +198,21 @@ fun MyScreen3(product: Product, funcao: KFunction4<Int, String, Double, Uri, Uni
 
 
 
+@Composable
+fun ImageFromUrl3(url: String) {
+    val painter = rememberImagePainter(
+        data = url,
+        builder = {
+            crossfade(true)
+        }
+    )
+
+    Image(
+        painter = painter,
+        contentScale = ContentScale.FillWidth,
+        contentDescription = null,
+        modifier = Modifier
+            .padding(16.dp, 8.dp)
+            .size(100.dp)
+    )
+}
