@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.principal.ui.theme
+package com.example.fabricasapatos.ui.activities.principal.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

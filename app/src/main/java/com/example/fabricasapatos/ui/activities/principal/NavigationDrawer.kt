@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.principal
+package com.example.fabricasapatos.ui.activities.principal
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
@@ -47,10 +47,10 @@ fun DrawerHeader() {
 
 @Composable
 fun DrawerBody(
-    items: List<MenuItem>,
-    modifier: Modifier = Modifier,
-    itemTextStyle: TextStyle = TextStyle(fontSize = 24.sp),
-    onItemClick: (MenuItem) -> Unit
+  items: List<MenuItem>,
+  modifier: Modifier = Modifier,
+  itemTextStyle: TextStyle = TextStyle(fontSize = 24.sp),
+  onItemClick: (MenuItem) -> Unit
 ) {
     LazyColumn(modifier) {
         items(items) { item ->

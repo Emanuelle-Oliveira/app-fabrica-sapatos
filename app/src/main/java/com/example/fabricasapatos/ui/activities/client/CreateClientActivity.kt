@@ -1,6 +1,7 @@
 package com.example.fabricasapatos.ui.activities.client
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -28,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.ICreateClientUseCase
-import com.example.fabricasapatos.principal.AppBar
-import com.example.fabricasapatos.principal.DrawerHeader
-import com.example.fabricasapatos.principal.NavigationDrawer
+import com.example.fabricasapatos.ui.activities.principal.AppBar
+import com.example.fabricasapatos.ui.activities.principal.DrawerHeader
+import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
 import com.example.fabricasapatos.ui.activities.client.ui.theme.FabricaSapatosTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -170,6 +171,8 @@ fun MyScreen(funcao: KFunction1<Client, Unit>) {
           textField3Value.value = ""
           textField4Value.value = ""
           textField5Value.value = ""
+
+          context.startActivity(Intent(context, GetClientsActivity::class.java))
         } else {
           Toast.makeText(context, "Todos os campos devem estar preenchidos!", Toast.LENGTH_SHORT).show()
         }

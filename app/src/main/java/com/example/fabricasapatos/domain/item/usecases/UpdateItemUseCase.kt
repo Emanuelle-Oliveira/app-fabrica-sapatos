@@ -10,7 +10,7 @@ class UpdateItemUseCase @Inject constructor(
   private val itemRepository: ItemRepository
 ): IUpdateItemUseCase {
 
-  override suspend fun invoke(id: Int, orderId: Int, productId: Int, quantity: Int): Item {
+  override suspend fun invoke(orderId: Int, productId: Int, quantity: Int, id: Int): Item {
     val item = Item(id, orderId, productId, quantity)
     return itemRepository.updateItem(item)
   }

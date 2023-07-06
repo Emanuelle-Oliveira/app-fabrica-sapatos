@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.principal
+package com.example.fabricasapatos.ui.activities.principal
 
 //import com.fabricasapatos.navigationdrawercompose.ui.theme.NavigationDrawerComposeTheme
 import android.annotation.SuppressLint
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
           Scaffold(
               scaffoldState = scaffoldState,
               topBar = {
-                  com.example.fabricasapatos.principal.AppBar(
+                  AppBar(
                       onNavigationIconClick = {
                           scope.launch {
                               scaffoldState.drawerState.open()

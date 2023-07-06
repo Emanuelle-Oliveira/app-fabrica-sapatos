@@ -1,6 +1,7 @@
 package com.example.fabricasapatos.ui.activities.product
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -24,9 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import coil.compose.rememberImagePainter
 import com.example.fabricasapatos.domain.product.usecases.contracts.ICreateProductUseCase
-import com.example.fabricasapatos.principal.AppBar
-import com.example.fabricasapatos.principal.DrawerHeader
-import com.example.fabricasapatos.principal.NavigationDrawer
+import com.example.fabricasapatos.ui.activities.principal.AppBar
+import com.example.fabricasapatos.ui.activities.principal.DrawerHeader
+import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
+import com.example.fabricasapatos.ui.activities.client.GetClientsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -159,6 +161,8 @@ fun MyScreen(funcao: KFunction3<String, Double, Uri, Unit>) {
                     // Limpar os campos de texto
                     textField1Value.value = ""
                     textField2Value.value = ""
+
+                    context.startActivity(Intent(context, GetProductsActivity::class.java))
                 } else {
                     Toast.makeText(context, "Todos os campos devem estar preenchidos!", Toast.LENGTH_SHORT).show()
                 }

@@ -35,9 +35,9 @@ import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUs
 import com.example.fabricasapatos.domain.order.model.Order
 import com.example.fabricasapatos.domain.order.usecases.contracts.IDeleteOrderUseCase
 import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByClientUseCase
-import com.example.fabricasapatos.principal.AppBar
-import com.example.fabricasapatos.principal.DrawerHeader
-import com.example.fabricasapatos.principal.NavigationDrawer
+import com.example.fabricasapatos.ui.activities.principal.AppBar
+import com.example.fabricasapatos.ui.activities.principal.DrawerHeader
+import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -187,11 +187,7 @@ fun TelaPedido(
                         itemContent = {
                             CadaPedido( orderList , order = it , deleteOrder , getOrderByCpf )
                         })
-
                 }
-
-
-
             }
         }
     )
@@ -225,7 +221,7 @@ fun CadaPedido(orderList: MutableState<List<Order>>, order: Order, deleteOrder: 
                     .align(Alignment.CenterVertically)
             ) {
                 androidx.compose.material3.Text(
-                    text = order.id.toString(),
+                    text = "Pedido " + order.id.toString(),
                     style = MaterialTheme.typography.titleLarge
                 )
                 androidx.compose.material3.Text(
@@ -255,7 +251,6 @@ fun CadaPedido(orderList: MutableState<List<Order>>, order: Order, deleteOrder: 
                 modifier = Modifier.wrapContentSize(Alignment.CenterEnd)
             ) {
                 IconButton(
-
                     onClick = {
                         showDialog.value = true
                     }
@@ -308,7 +303,6 @@ fun ClientItem(client: Client) {
     Text(text = client.name)
 }
 
-
 @Composable
 fun ClientSelect(
     getOrderByCpf: KFunction1<String, Unit>,
@@ -356,9 +350,3 @@ fun ClientSelect(
         )
     }
 }
-
-
-
-
-
-

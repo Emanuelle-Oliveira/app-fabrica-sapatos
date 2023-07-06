@@ -1,4 +1,4 @@
-package com.example.fabricasapatos.principal
+package com.example.fabricasapatos.ui.activities.principal
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.TopAppBar

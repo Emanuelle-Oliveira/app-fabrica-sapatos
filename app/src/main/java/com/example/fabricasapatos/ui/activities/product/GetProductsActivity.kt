@@ -40,9 +40,9 @@ import coil.compose.rememberImagePainter
 import com.example.fabricasapatos.domain.product.model.Product
 import com.example.fabricasapatos.domain.product.usecases.contracts.IDeleteProductUseCase
 import com.example.fabricasapatos.domain.product.usecases.contracts.IGetProductsUseCase
-import com.example.fabricasapatos.principal.AppBar
-import com.example.fabricasapatos.principal.DrawerHeader
-import com.example.fabricasapatos.principal.NavigationDrawer
+import com.example.fabricasapatos.ui.activities.principal.AppBar
+import com.example.fabricasapatos.ui.activities.principal.DrawerHeader
+import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
 import com.example.fabricasapatos.ui.activities.client.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

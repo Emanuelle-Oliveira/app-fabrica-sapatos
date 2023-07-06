@@ -25,9 +25,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IUpdateClientUseCase
-import com.example.fabricasapatos.principal.AppBar
-import com.example.fabricasapatos.principal.DrawerHeader
-import com.example.fabricasapatos.principal.NavigationDrawer
+import com.example.fabricasapatos.ui.activities.principal.AppBar
+import com.example.fabricasapatos.ui.activities.principal.DrawerHeader
+import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
 import com.example.fabricasapatos.ui.activities.client.ui.theme.FabricaSapatosTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -176,6 +176,8 @@ fun MyScreen2(client : Client , funcao: KFunction1<Client, Unit>) {
           textField3Value.value = ""
           textField4Value.value = ""
           textField5Value.value = ""
+
+          context.startActivity(Intent(context, GetClientsActivity::class.java))
         } else {
           Toast.makeText(context, "Todos os campos devem estar preenchidos!", Toast.LENGTH_SHORT).show()
         }

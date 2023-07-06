@@ -21,7 +21,7 @@ class CreateItemUseCase @Inject constructor(
       val orderId = orderRepository.getLastOrderId()
 
       val item = Item(id, orderId, productId, quantity)
-      Log.i("teste", item.toString())
+      //Log.i("teste", item.toString())
       itemRepository.createItem(item)
     } catch (e: Exception) {
       throw e

@@ -2,6 +2,7 @@ package com.example.fabricasapatos.ui.activities.order
 
 //import androidx.compose.material.icons.Icons
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.material.*
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
@@ -27,10 +29,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
+import com.example.fabricasapatos.domain.item.usecases.DeleteItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastItemIdUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateLastItemIdUseCase2
@@ -39,16 +43,16 @@ import com.example.fabricasapatos.domain.order.usecases.contracts.ICreateOrderUs
 import com.example.fabricasapatos.domain.order.usecases.contracts.IGetOrdersByClientUseCase
 import com.example.fabricasapatos.domain.product.model.Product
 import com.example.fabricasapatos.domain.product.usecases.contracts.IGetProductsUseCase
-import com.example.fabricasapatos.principal.AppBar
-import com.example.fabricasapatos.principal.DrawerHeader
-import com.example.fabricasapatos.principal.NavigationDrawer
+import com.example.fabricasapatos.ui.activities.principal.AppBar
+import com.example.fabricasapatos.ui.activities.principal.DrawerHeader
+import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction3
 
-data class ItemTeste (
+data class ItemCreate (
     val productId: Int,
     var quantity: Int
 )
@@ -76,6 +80,10 @@ class CreateOrderActivity : ComponentActivity() {
 
     @Inject
     lateinit var updateLastItemIdUseCase2: IUpdateLastItemIdUseCase2
+
+    @Inject
+    lateinit var deleteItemUseCase: DeleteItemUseCase
+
 
     private var orderList = mutableStateOf(emptyList<Order>())
     private val clientsList = mutableStateOf(emptyList<Client>())
@@ -107,6 +115,11 @@ class CreateOrderActivity : ComponentActivity() {
         }
     }
 
+    fun deleteItem(id: Int) {
+        lifecycleScope.launch {
+            deleteItemUseCase(id)
+        }
+    }
 
     fun getProducts() {
         lifecycleScope.launch {
@@ -154,7 +167,7 @@ class CreateOrderActivity : ComponentActivity() {
                 }
             ) {
                 // DropdownMenuExample(clientsList , ::getClients)
-                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem, lastItemId, ::updateLastItemId)
+                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem, lastItemId, ::updateLastItemId, ::deleteItem)
             }
         }
     }
@@ -169,7 +182,8 @@ fun TelaNovoPedido(
     productList: MutableState<List<Product>>,
     createItem: KFunction3<Int, Int, Int, Unit>,
     lastItemId: MutableState<Int>,
-    updateLastItemId: (Int, Int) -> Unit
+    updateLastItemId: (Int, Int) -> Unit,
+    deleteItem: KFunction1<Int, Unit>
 ) {
     val textValueClient = remember { mutableStateOf("") }
     val textValueProduct = remember { mutableStateOf("") }
@@ -179,7 +193,9 @@ fun TelaNovoPedido(
     var selectedProduct by remember  { mutableStateOf<Product?>(null) }
     var selectedProductId by remember { mutableStateOf(null) }
     var quantity : Int = 1
-    val pedidoList = remember { mutableStateListOf<ItemTeste>() } // Lista para armazenar os pedidos
+    val pedidoList = remember { mutableStateListOf<ItemCreate>() } // Lista para armazenar os pedidos
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -205,7 +221,7 @@ fun TelaNovoPedido(
                 onClick = {
                     // Adicionar o valor do OutlinedTextField à lista de pedidos
                     selectedProduct?.let {
-                        pedidoList.add(ItemTeste(it.id.toInt(), quantity))
+                        pedidoList.add(ItemCreate(it.id.toInt(), quantity))
                     }
                 },
                 shape = RoundedCornerShape(16.dp),
@@ -226,7 +242,8 @@ fun TelaNovoPedido(
                     pedido = pedido,
                     productList = productList.value,
                     numero = index + 1,
-                    quantidade = pedido.quantity
+                    quantidade = pedido.quantity,
+                    //deleteItem = deleteItem
                 ) { novaQuantidade ->
                     pedido.quantity = novaQuantidade
                 }
@@ -246,6 +263,8 @@ fun TelaNovoPedido(
                     var item = createItem(lastItemId.value+1, item.productId, item.quantity)
                     lastItemId.value += 1
                 }
+
+                context.startActivity(Intent(context, GetOrdersActivity::class.java))
             },
             colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = MaterialTheme.colorScheme.errorContainer),
             modifier = Modifier
@@ -302,12 +321,10 @@ fun ProductItem(product: Product) {
     Text(text = product.description)
 }
 
-
 @Composable
 fun ClientItem2(client: Client) {
     Text(text = client.name)
 }
-
 
 @Composable
 fun ClientSelect2(clientList: MutableState<List<Client>>, selectedClientCpf: String, onClientSelected: (Client) -> Unit) {
@@ -347,16 +364,19 @@ fun ClientSelect2(clientList: MutableState<List<Client>>, selectedClientCpf: Str
 
 @Composable
 fun PedidoCard(
-    pedido: ItemTeste,
+    pedido: ItemCreate,
     productList: List<Product>,
     numero: Int,
     quantidade: Int,
-    onQuantityChanged: (Int) -> Unit
+    onQuantityChanged: (Int) -> Unit,
+    //deleteItem: KFunction1<Int, Unit>
 ) {
     var quantidadeAtual by remember { mutableStateOf(quantidade) }
     val product = productList.find { it.id == pedido.productId.toInt() }
 
-    Card {
+    Card(
+        modifier = Modifier.padding(5.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -389,6 +409,20 @@ fun PedidoCard(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = "Adicionar"
                 )
+            }
+            Box(
+                modifier = Modifier.wrapContentSize(Alignment.CenterEnd)
+            ) {
+                IconButton(
+                    onClick = {
+                        //deleteItem
+                    }
+                ) {
+                    androidx.compose.material3.Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Lixeira"
+                    )
+                }
             }
         }
     }
