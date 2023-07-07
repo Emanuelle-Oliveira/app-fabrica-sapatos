@@ -105,7 +105,7 @@ class GetProductsActivity : ComponentActivity() {
         lifecycleScope.launch {
             productList.value = getProductsUseCase()
             //println("Tamanho da lista de produtos: ${productList.value.size}")
-            Log.i("TESTE", productList.value.size.toString())
+            //Log.i("TESTE", productList.value.size.toString())
         }
     }
 }

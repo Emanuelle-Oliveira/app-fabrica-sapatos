@@ -91,7 +91,7 @@ class FirebaseProductDataSource @Inject constructor(
 
             val id = idString.toInt()
 
-            Log.i("TESTE", id.toString())
+            //Log.i("TESTE", id.toString())
 
             val product = DescriptionAndIdProduct(description, id)
             productsList.add(product)

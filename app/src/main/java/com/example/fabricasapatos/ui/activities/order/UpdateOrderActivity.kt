@@ -299,7 +299,7 @@ fun ClientSelect3(orderClientCpf : String, clientList: MutableState<List<Client>
 
     var clientName = "aa"
     for(client in clientList.value) {
-        Log.i("teste", client.cpf)
+        //Log.i("teste", client.cpf)
         if(client.cpf == orderClientCpf ) {
             clientName = client.name
         }

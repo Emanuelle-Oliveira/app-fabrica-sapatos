@@ -82,17 +82,6 @@ class MainActivity : ComponentActivity() {
 
           }
       }
-
-
-    lifecycleScope.launch {
-      //val product = createProductUseCase("descrevendo o sandalia", 150.0, Uri.EMPTY)
-      //val list = getDescriptionAndIdProductsUseCase()
-      // val list = getItemsByOrderUseCase(10)
-      //Log.i("TESTE", list.toString())
-      //val order = createOrderUseCase("1")
-      //val item = createItemUseCase(10, 0, 1)
-      val client = createClientUseCase("567", "maria", "738948", "rua x", "@maria")
-    }
   }
 }
 
