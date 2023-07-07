@@ -13,11 +13,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,10 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.item.model.Item
-import com.example.fabricasapatos.domain.item.usecases.contracts.IGetItemsByOrderUseCase
-import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastItemIdUseCase
-import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateItemUseCase
-import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateLastItemIdUseCase2
+import com.example.fabricasapatos.domain.item.usecases.contracts.*
 import com.example.fabricasapatos.domain.order.model.Order
 import com.example.fabricasapatos.domain.order.usecases.contracts.IUpdateOrderUseCase
 import com.example.fabricasapatos.domain.product.model.Product
@@ -41,6 +40,7 @@ import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction2
 import kotlin.reflect.KFunction4
 
@@ -73,6 +73,9 @@ class UpdateOrderActivity : ComponentActivity() {
 
     @Inject
     lateinit var getLastItemIdUseCase: IGetLastItemIdUseCase
+
+    @Inject
+    lateinit var deleteItemUseCase : IDeleteItemUseCase
 
     private var orderList = mutableStateOf(emptyList<Order>())
     private val clientsList = mutableStateOf(emptyList<Client>())
@@ -123,6 +126,12 @@ class UpdateOrderActivity : ComponentActivity() {
         }
     }
 
+    fun deleteItem(id: Int) {
+        lifecycleScope.launch {
+            deleteItemUseCase(id)
+        }
+    }
+
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,7 +163,7 @@ class UpdateOrderActivity : ComponentActivity() {
                     NavigationDrawer()
                 }
             ) {
-                TelaUpdatePedido(::updateOrder, ::updateItem, clientsList, productList, itemsList, order, lastItemId, ::updateLastItemId)
+                TelaUpdatePedido(::updateOrder, ::updateItem, clientsList, productList, itemsList, order, lastItemId, ::deleteItem, ::updateLastItemId)
             }
         }
     }
@@ -171,13 +180,14 @@ fun TelaUpdatePedido(
     itemsList: MutableState<List<Item>>,
     order: Order?,
     lastItemId: MutableState<Int>,
+    deleteItem: KFunction1<Int, Unit>,
     updateLastItemId: (Int, Int) -> Unit
 ) {
     val textValueClient = remember { mutableStateOf("") }
     val textValueProduct = remember { mutableStateOf("") }
 
     var selectedClient by remember { mutableStateOf<Client?>(null) }
-    var selectedClientCpf by remember { mutableStateOf("") }
+    var selectedClientCpf by remember { mutableStateOf(order!!.clientCpf) }
 
     var selectedProduct by remember  { mutableStateOf<Product?>(null) }
     var selectedProductId by remember { mutableStateOf(null) }
@@ -242,6 +252,10 @@ fun TelaUpdatePedido(
                     pedido = pedido,
                     productList = productList.value,
                     numero = index + 1,
+                    pedidoList = pedidoList,
+                    itemsList = itemsList,
+                    index = index,
+                    deleteItem = deleteItem,
                     quantidade = pedido.quantity
                 ) { novaQuantidade ->
                     pedido.quantity = novaQuantidade
@@ -331,12 +345,18 @@ fun PedidoCard2(
     productList: List<Product>,
     numero: Int,
     quantidade: Int,
+    pedidoList: SnapshotStateList<ItemUpdate>,
+    itemsList: MutableState<List<Item>>,
+    index: Int,
+    deleteItem: KFunction1<Int, Unit>,
     onQuantityChanged: (Int) -> Unit
 ) {
     var quantidadeAtual by remember { mutableStateOf(quantidade) }
     val product = productList.find { it.id == pedido.productId.toInt() }
 
-    Card {
+    Card (
+        modifier = Modifier.padding(5.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -369,6 +389,29 @@ fun PedidoCard2(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = "Adicionar"
                 )
+            }
+            Box(
+                modifier = Modifier.wrapContentSize(Alignment.CenterEnd)
+            ) {
+                IconButton(
+                    onClick = {
+                        if(pedidoList[index].id == null) {
+                            pedidoList.removeAt(index)
+                        } else {
+                            deleteItem(pedidoList[index].id!!)
+                            val newItemList = itemsList.value.toMutableList().apply {
+                                removeAll { it.id == pedidoList[index].id }
+                            }
+                            itemsList.value = newItemList
+                            pedidoList.removeAt(index)
+                        }
+                    }
+                ) {
+                    androidx.compose.material3.Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Lixeira"
+                    )
+                }
             }
         }
     }

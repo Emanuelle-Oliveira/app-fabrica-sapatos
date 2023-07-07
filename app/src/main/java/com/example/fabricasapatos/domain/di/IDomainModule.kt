@@ -15,11 +15,13 @@ import com.example.fabricasapatos.domain.item.usecases.DeleteItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.UpdateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.GetItemsByOrderUseCase
 import com.example.fabricasapatos.domain.item.usecases.GetLastItemIdUseCase
+import com.example.fabricasapatos.domain.item.usecases.GetLastOrderIdUseCase
 import com.example.fabricasapatos.domain.item.usecases.UpdateLastItemIdUseCase2
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IDeleteItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IGetItemsByOrderUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastItemIdUseCase
+import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastOrderIdUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateLastItemIdUseCase2
 import com.example.fabricasapatos.domain.order.usecases.CreateOrderUseCase
@@ -95,6 +97,9 @@ interface IDomainModule {
 
   @Binds
   fun bindGetOrdersByClientUseCase(useCase: GetOrdersByClientUseCase): IGetOrdersByClientUseCase
+
+  @Binds
+  fun bindGetLastOrderIdUseCase(useCase: GetLastOrderIdUseCase): IGetLastOrderIdUseCase
 
   @Binds
   fun bindDeleteOrderUseCase(useCase: DeleteOrderUseCase): IDeleteOrderUseCase

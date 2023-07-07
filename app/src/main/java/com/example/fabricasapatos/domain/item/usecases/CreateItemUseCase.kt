@@ -13,12 +13,12 @@ class CreateItemUseCase @Inject constructor(
   private val itemRepository: ItemRepository,
   private val orderRepository: OrderRepository
 ): ICreateItemUseCase {
-  override suspend fun invoke(id: Int, productId: Int, quantity: Int): Item {
+  override suspend fun invoke(id: Int, orderId: Int, productId: Int, quantity: Int): Item {
     return try {
       //val id = itemRepository.getLastItemId()
       //itemRepository.updateLastItemId(id)
 
-      val orderId = orderRepository.getLastOrderId()
+      //val orderId = orderRepository.getLastOrderId()
 
       val item = Item(id, orderId, productId, quantity)
       //Log.i("teste", item.toString())

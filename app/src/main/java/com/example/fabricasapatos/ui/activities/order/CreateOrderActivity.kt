@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +36,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.fabricasapatos.domain.client.model.Client
 import com.example.fabricasapatos.domain.client.usecases.contracts.IGetClientsUseCase
 import com.example.fabricasapatos.domain.item.usecases.DeleteItemUseCase
+import com.example.fabricasapatos.domain.item.usecases.GetLastOrderIdUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.ICreateItemUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IGetLastItemIdUseCase
 import com.example.fabricasapatos.domain.item.usecases.contracts.IUpdateLastItemIdUseCase2
@@ -49,8 +51,9 @@ import com.example.fabricasapatos.ui.activities.principal.NavigationDrawer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.reflect.KFunction0
 import kotlin.reflect.KFunction1
-import kotlin.reflect.KFunction3
+import kotlin.reflect.KFunction4
 
 data class ItemCreate (
     val productId: Int,
@@ -79,17 +82,20 @@ class CreateOrderActivity : ComponentActivity() {
     lateinit var getLastItemIdUseCase: IGetLastItemIdUseCase
 
     @Inject
+    lateinit var getLastOrderIdUseCase: GetLastOrderIdUseCase
+
+    @Inject
     lateinit var updateLastItemIdUseCase2: IUpdateLastItemIdUseCase2
 
     @Inject
     lateinit var deleteItemUseCase: DeleteItemUseCase
-
 
     private var orderList = mutableStateOf(emptyList<Order>())
     private val clientsList = mutableStateOf(emptyList<Client>())
     private val productList = mutableStateOf(emptyList<Product>())
 
     var lastItemId = mutableStateOf(0)
+    var lastOrderId = mutableStateOf(0)
 
     fun getOrders(clientCpf : String){
         lifecycleScope.launch {
@@ -109,9 +115,9 @@ class CreateOrderActivity : ComponentActivity() {
         }
     }
 
-    fun createItem(id: Int, productId : Int , quantity : Int) {
+    fun createItem(id: Int, orderId: Int, productId : Int , quantity : Int) {
         lifecycleScope.launch {
-            createItemUseCase(id, productId, quantity)
+            createItemUseCase(id, orderId, productId, quantity)
         }
     }
 
@@ -124,6 +130,12 @@ class CreateOrderActivity : ComponentActivity() {
     fun getProducts() {
         lifecycleScope.launch {
             productList.value = getProductsUseCase()
+        }
+    }
+
+    fun getLastOrderId() {
+        lifecycleScope.launch {
+            lastOrderId.value = getLastOrderIdUseCase()
         }
     }
 
@@ -146,6 +158,7 @@ class CreateOrderActivity : ComponentActivity() {
         getClients()
         getProducts()
         getLastItemId()
+        getLastOrderId()
         setContent {
             val scaffoldState = rememberScaffoldState()
             val scope = rememberCoroutineScope()
@@ -167,7 +180,7 @@ class CreateOrderActivity : ComponentActivity() {
                 }
             ) {
                 // DropdownMenuExample(clientsList , ::getClients)
-                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem, lastItemId, ::updateLastItemId, ::deleteItem)
+                TelaNovoPedido(::createOrder, clientsList , productList , ::createItem, lastItemId, lastOrderId, ::updateLastItemId, ::deleteItem)
             }
         }
     }
@@ -180,8 +193,9 @@ fun TelaNovoPedido(
     createOrder: KFunction1<String, Unit>,
     clientList: MutableState<List<Client>>,
     productList: MutableState<List<Product>>,
-    createItem: KFunction3<Int, Int, Int, Unit>,
+    createItem: KFunction4<Int, Int, Int, Int, Unit>,
     lastItemId: MutableState<Int>,
+    lastOrderId: MutableState<Int>,
     updateLastItemId: (Int, Int) -> Unit,
     deleteItem: KFunction1<Int, Unit>
 ) {
@@ -243,7 +257,8 @@ fun TelaNovoPedido(
                     productList = productList.value,
                     numero = index + 1,
                     quantidade = pedido.quantity,
-                    //deleteItem = deleteItem
+                    pedidoList = pedidoList,
+                    index = index
                 ) { novaQuantidade ->
                     pedido.quantity = novaQuantidade
                 }
@@ -260,7 +275,7 @@ fun TelaNovoPedido(
 
                 pedidoList.forEach { item ->
                     //Log.i("teste", item.toString())
-                    var item = createItem(lastItemId.value+1, item.productId, item.quantity)
+                    var item = createItem(lastItemId.value+1, lastOrderId.value+1, item.productId, item.quantity)
                     lastItemId.value += 1
                 }
 
@@ -368,8 +383,9 @@ fun PedidoCard(
     productList: List<Product>,
     numero: Int,
     quantidade: Int,
+    pedidoList: SnapshotStateList<ItemCreate>,
+    index: Int,
     onQuantityChanged: (Int) -> Unit,
-    //deleteItem: KFunction1<Int, Unit>
 ) {
     var quantidadeAtual by remember { mutableStateOf(quantidade) }
     val product = productList.find { it.id == pedido.productId.toInt() }
@@ -415,7 +431,7 @@ fun PedidoCard(
             ) {
                 IconButton(
                     onClick = {
-                        //deleteItem
+                        pedidoList.removeAt(index)
                     }
                 ) {
                     androidx.compose.material3.Icon(
