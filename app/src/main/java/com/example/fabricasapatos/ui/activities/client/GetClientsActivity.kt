@@ -38,8 +38,6 @@ import javax.inject.Inject
 import kotlin.reflect.KFunction0
 import kotlin.reflect.KFunction1
 
-
-
 @AndroidEntryPoint
 class GetClientsActivity : ComponentActivity() {
 
